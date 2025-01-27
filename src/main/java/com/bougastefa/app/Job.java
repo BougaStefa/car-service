@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class Job {
   private String jobID;
-  private String carRegNo;
+  private String regNo;
   private String garageID;
   private String dateIn;
   private String dateOut;
@@ -18,9 +18,10 @@ public class Job {
   private static final String user = "root";
   private static final String pw = "9917";
 
-  public Job(String jobID, String carRegNo, String garageID, String dateIn, String dateOut, double cost) {
+  public Job(
+      String jobID, String regNo, String garageID, String dateIn, String dateOut, double cost) {
     this.jobID = jobID;
-    this.carRegNo = carRegNo;
+    this.regNo = regNo;
     this.garageID = garageID;
     this.dateIn = dateIn;
     this.dateOut = dateOut;
@@ -31,8 +32,8 @@ public class Job {
     this.jobID = jobID;
   }
 
-  public void setCarRegNo(String carRegNo) {
-    this.carRegNo = carRegNo;
+  public void setRegNo(String regNo) {
+    this.regNo = regNo;
   }
 
   public void setGarageID(String garageID) {
@@ -55,8 +56,8 @@ public class Job {
     return jobID;
   }
 
-  public String getCarRegNo() {
-    return carRegNo;
+  public String getRegNo() {
+    return regNo;
   }
 
   public String getGarageID() {
@@ -80,10 +81,13 @@ public class Job {
   }
 
   public void addJob() {
-    String sql = "INSERT INTO jobs (jobID, carRegNo, garageID, dateIn, dateOut, cost) VALUES (?, ?, ?, ?, ?, ?)";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    String sql =
+        "INSERT INTO jobs (jobID, regNo, garageID, dateIn, dateOut, cost) VALUES (?, ?, ?, ?, ?,"
+            + " ?)";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, jobID);
-      prst.setString(2, carRegNo);
+      prst.setString(2, regNo);
       prst.setString(3, garageID);
       prst.setString(4, dateIn);
       prst.setString(5, dateOut);
@@ -95,9 +99,12 @@ public class Job {
   }
 
   public void editJob() {
-    String sql = "UPDATE jobs SET carRegNo = ?, garageID = ?, dateIn = ?, dateOut = ?, cost = ? WHERE jobID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
-      prst.setString(1, carRegNo);
+    String sql =
+        "UPDATE jobs SET regNo = ?, garageID = ?, dateIn = ?, dateOut = ?, cost = ? WHERE jobID ="
+            + " ?";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
+      prst.setString(1, regNo);
       prst.setString(2, garageID);
       prst.setString(3, dateIn);
       prst.setString(4, dateOut);
@@ -111,7 +118,8 @@ public class Job {
 
   public void deleteJob() {
     String sql = "DELETE FROM jobs WHERE jobID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, jobID);
       prst.executeUpdate();
     } catch (SQLException e) {
@@ -121,11 +129,12 @@ public class Job {
 
   public void searchJob() {
     String sql = "SELECT * FROM jobs WHERE jobID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, jobID);
       ResultSet rs = prst.executeQuery();
       while (rs.next()) {
-        this.carRegNo = rs.getString("carRegNo");
+        this.regNo = rs.getString("regNo");
         this.garageID = rs.getString("garageID");
         this.dateIn = rs.getString("dateIn");
         this.dateOut = rs.getString("dateOut");

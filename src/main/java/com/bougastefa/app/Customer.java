@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Customer {
   private final String url = "jdbc:mysql://localhost:3306/car-service";
@@ -18,7 +17,13 @@ public class Customer {
   private String postCode;
   private String phoneNo;
 
-  public Customer(String customerID, String forename, String surname, String address, String postCode, String phoneNo) {
+  public Customer(
+      String customerID,
+      String forename,
+      String surname,
+      String address,
+      String postCode,
+      String phoneNo) {
     this.customerID = customerID;
     this.forename = forename;
     this.surname = surname;
@@ -80,8 +85,11 @@ public class Customer {
   }
 
   private void addCustomer() {
-    String sql = "IINSERT INTO customers (customerID, forename, surname, address, postCode, phoneNo) VALUES (?, ?, ?, ?, ?, ?)";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    String sql =
+        "IINSERT INTO customers (customerID, forename, surname, address, postCode, phoneNo) VALUES"
+            + " (?, ?, ?, ?, ?, ?)";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, customerID);
       prst.setString(2, forename);
       prst.setString(3, surname);
@@ -95,8 +103,11 @@ public class Customer {
   }
 
   private void editCustomer() {
-    String sql = "UPDATE customers SET forename = ?, surname = ?, address = ?, postCode = ?, phoneNo = ? WHERE customerID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    String sql =
+        "UPDATE customers SET forename = ?, surname = ?, address = ?, postCode = ?, phoneNo = ?"
+            + " WHERE customerID = ?";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, forename);
       prst.setString(2, surname);
       prst.setString(3, address);
@@ -111,7 +122,8 @@ public class Customer {
 
   private void deleteCustomer() {
     String sql = "DELETE FROM customers WHERE customerID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, customerID);
       prst.executeUpdate();
     } catch (SQLException e) {
@@ -121,7 +133,8 @@ public class Customer {
 
   private void searchCustomer() {
     String sql = "SELECT * FROM customers WHERE customerID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, customerID);
       ResultSet rs = prst.executeQuery();
       while (rs.next()) {
@@ -135,5 +148,4 @@ public class Customer {
       System.out.println(e.getMessage());
     }
   }
-
 }

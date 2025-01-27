@@ -18,7 +18,13 @@ public class Garage {
   private static final String user = "user";
   private static final String pw = "9917";
 
-  public Garage(String garageID, String garageName, String address, String town, String postCode, String phoneNo) {
+  public Garage(
+      String garageID,
+      String garageName,
+      String address,
+      String town,
+      String postCode,
+      String phoneNo) {
     this.garageID = garageID;
     this.garageName = garageName;
     this.address = address;
@@ -80,8 +86,11 @@ public class Garage {
   }
 
   public void addGarage() {
-    String sql = "INSERT INTO garages (garageID, garageName, address, town, postCode, phoneNo) VALUES (?, ?, ?, ?, ?, ?)";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    String sql =
+        "INSERT INTO garages (garageID, garageName, address, town, postCode, phoneNo) VALUES (?, ?,"
+            + " ?, ?, ?, ?)";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, garageID);
       prst.setString(2, garageName);
       prst.setString(3, address);
@@ -95,8 +104,11 @@ public class Garage {
   }
 
   public void editGarage() {
-    String sql = "UPDATE garages SET garageName = ?, address = ?, town = ?, postCode = ?, phoneNo = ? WHERE garageID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    String sql =
+        "UPDATE garages SET garageName = ?, address = ?, town = ?, postCode = ?, phoneNo = ? WHERE"
+            + " garageID = ?";
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, garageName);
       prst.setString(2, address);
       prst.setString(3, town);
@@ -111,7 +123,8 @@ public class Garage {
 
   public void deleteGarage() {
     String sql = "DELETE FROM garages WHERE garageID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, garageID);
       prst.executeUpdate();
     } catch (SQLException e) {
@@ -121,7 +134,8 @@ public class Garage {
 
   public void searchGarage() {
     String sql = "SELECT * FROM garages WHERE garageID = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, garageID);
       ResultSet rs = prst.executeQuery();
       while (rs.next()) {

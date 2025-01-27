@@ -71,7 +71,8 @@ public class Car {
 
   public void addCar() {
     String sql = "INSERT INTO cars (regNo, make, model, year, customerID) VALUES (?, ?, ?, ?, ?)";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, regNo);
       prst.setString(2, make);
       prst.setString(3, model);
@@ -85,7 +86,8 @@ public class Car {
 
   public void editCar() {
     String sql = "UPDATE cars SET make = ?, model = ?, year = ?, customerID = ? WHERE regNo = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, make);
       prst.setString(2, model);
       prst.setString(3, year);
@@ -99,7 +101,8 @@ public class Car {
 
   public void deleteCar() {
     String sql = "DELETE FROM cars WHERE regNo = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, regNo);
       prst.executeUpdate();
     } catch (SQLException e) {
@@ -109,7 +112,8 @@ public class Car {
 
   public void searchCar() {
     String sql = "SELECT * FROM cars WHERE regNo = ?";
-    try (Connection conn = connect(); PreparedStatement prst = conn.prepareStatement(sql)) {
+    try (Connection conn = connect();
+        PreparedStatement prst = conn.prepareStatement(sql)) {
       prst.setString(1, regNo);
       ResultSet rs = prst.executeQuery();
       while (rs.next()) {
