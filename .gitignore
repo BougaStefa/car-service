@@ -7,7 +7,7 @@ target/
 *.war
 *.ear
 .settings/
-.project/
-.classpath/
+.project
+.classpath
 bin/
 tmp/
