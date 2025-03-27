@@ -1,0 +1,44 @@
+.root {
+  -fx-font-family: "Segoe UI", Arial, sans-serif;
+  -fx-background-color: #f5f5f5;
+}
+
+.button {
+  -fx-background-color: #2196f3;
+  -fx-text-fill: white;
+  -fx-padding: 5 15 5 15;
+}
+
+.button:hover {
+  -fx-background-color: #1976d2;
+}
+
+.text-field {
+  -fx-padding: 5;
+}
+
+.table-view {
+  -fx-background-color: white;
+  -fx-border-color: #e0e0e0;
+}
+
+.table-view .column-header {
+  -fx-background-color: #2196f3;
+  -fx-text-fill: white;
+}
+
+.tab-pane {
+  -fx-background-color: white;
+}
+
+.tab {
+  -fx-background-color: #e0e0e0;
+}
+
+.tab:selected {
+  -fx-background-color: #2196f3;
+}
+
+.tab:selected .tab-label {
+  -fx-text-fill: white;
+}
