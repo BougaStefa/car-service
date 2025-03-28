@@ -165,3 +165,33 @@
   -fx-font-size: 12px;
   -fx-padding: 10px;
 }
+.status-bar {
+  -fx-padding: 5;
+  -fx-background-color: #f4f4f4;
+  -fx-border-color: #ddd;
+  -fx-border-width: 1 0 0 0;
+}
+
+.status-bar Label {
+  -fx-text-fill: #666;
+}
+
+.menu-bar {
+  -fx-background-color: #f8f9fa;
+}
+
+.menu-bar .label {
+  -fx-text-fill: #212529;
+}
+
+.menu-item:focused {
+  -fx-background-color: #007bff;
+}
+
+.menu-item:focused .label {
+  -fx-text-fill: white;
+}
+
+.stack-pane {
+  -fx-background-color: white;
+}
