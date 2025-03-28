@@ -15,6 +15,21 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
       "UPDATE Garage SET garageName = ?, address = ?, town = ?, postCode = ?, phoneNo = ? WHERE"
           + " garageId = ?";
   private static final String DELETE = "DELETE FROM Garage WHERE garageId = ?";
+  private static final String FIND_BY_NAME = "SELECT * FROM Garage WHERE LOWER(garageName) LIKE ?";
+
+  public List<Garage> findByName(String name) throws SQLException {
+    List<Garage> garages = new ArrayList<>();
+    try (Connection conn = DatabaseConfig.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(FIND_BY_NAME)) {
+      stmt.setString(1, "%" + name.toLowerCase() + "%");
+      try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+          garages.add(mapRowToGarage(rs));
+        }
+      }
+    }
+    return garages;
+  }
 
   @Override
   public Garage findById(Long id) throws SQLException {

@@ -63,6 +63,14 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  public List<Garage> findByName(String name) throws ServiceException {
+    try {
+      return garageDAO.findByName(name);
+    } catch (SQLException e) {
+      throw new ServiceException("Error finding garages with name containing: " + name, e);
+    }
+  }
+
   private void validateGarage(Garage garage) throws ServiceException {
     if (garage.getGarageName() == null || garage.getGarageName().trim().isEmpty()) {
       throw new ServiceException("Garage name cannot be empty");
