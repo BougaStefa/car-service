@@ -7,9 +7,11 @@ import java.util.List;
 
 public class CustomerService implements CrudService<Customer, Long> {
   private final CustomerDAO customerDAO;
+  private final ActivityService activityService;
 
   public CustomerService() {
     this.customerDAO = new CustomerDAO();
+    this.activityService = new ActivityService();
   }
 
   @Override
@@ -46,7 +48,13 @@ public class CustomerService implements CrudService<Customer, Long> {
   public Long save(Customer customer) throws ServiceException {
     try {
       validateCustomer(customer);
-      return customerDAO.save(customer);
+      Long id = customerDAO.save(customer);
+      activityService.logActivity(
+          "CUSTOMER",
+          "CREATE",
+          "New customer created: " + customer.getForename() + " " + customer.getSurname(),
+          "BougaStefa");
+      return id;
     } catch (SQLException e) {
       throw new ServiceException("Error saving customer", e);
     }
@@ -56,18 +64,33 @@ public class CustomerService implements CrudService<Customer, Long> {
   public boolean update(Customer customer) throws ServiceException {
     try {
       validateCustomer(customer);
-      return customerDAO.update(customer);
+      boolean updated = customerDAO.update(customer);
+      if (updated) {
+        // Log the activity
+        activityService.logActivity(
+            "CUSTOMER",
+            "UPDATE",
+            "Customer updated: " + customer.getForename() + " " + customer.getSurname(),
+            "BougaStefa");
+      }
+      return updated;
     } catch (SQLException e) {
-      throw new ServiceException("Error updating customer with ID: " + customer.getCustomerId(), e);
+      throw new ServiceException("Error updating customer", e);
     }
   }
 
   @Override
-  public boolean delete(Long id) throws ServiceException {
+  public boolean delete(Long customerId) throws ServiceException {
     try {
-      return customerDAO.delete(id);
+      boolean deleted = customerDAO.delete(customerId);
+      if (deleted) {
+        // Log the activity
+        activityService.logActivity(
+            "CUSTOMER", "DELETE", "Customer deleted with ID: " + customerId, "BougaStefa");
+      }
+      return deleted;
     } catch (SQLException e) {
-      throw new ServiceException("Error deleting customer with ID: " + id, e);
+      throw new ServiceException("Error deleting customer", e);
     }
   }
 

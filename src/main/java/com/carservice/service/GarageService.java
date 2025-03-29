@@ -7,9 +7,11 @@ import java.util.List;
 
 public class GarageService implements CrudService<Garage, Long> {
   private final GarageDAO garageDAO;
+  private final ActivityService activityService;
 
   public GarageService() {
     this.garageDAO = new GarageDAO();
+    this.activityService = new ActivityService();
   }
 
   @Override
@@ -38,7 +40,11 @@ public class GarageService implements CrudService<Garage, Long> {
   public Long save(Garage garage) throws ServiceException {
     try {
       validateGarage(garage);
-      return garageDAO.save(garage);
+      Long id = garageDAO.save(garage);
+      // Log the activity
+      activityService.logActivity(
+          "GARAGE", "CREATE", "New garage created: " + garage.getGarageName(), "BougaStefa");
+      return id;
     } catch (SQLException e) {
       throw new ServiceException("Error saving garage", e);
     }
@@ -48,18 +54,30 @@ public class GarageService implements CrudService<Garage, Long> {
   public boolean update(Garage garage) throws ServiceException {
     try {
       validateGarage(garage);
-      return garageDAO.update(garage);
+      boolean updated = garageDAO.update(garage);
+      if (updated) {
+        // Log the activity
+        activityService.logActivity(
+            "GARAGE", "UPDATE", "Garage updated: " + garage.getGarageName(), "BougaStefa");
+      }
+      return updated;
     } catch (SQLException e) {
-      throw new ServiceException("Error updating garage with ID: " + garage.getGarageId(), e);
+      throw new ServiceException("Error updating garage", e);
     }
   }
 
   @Override
-  public boolean delete(Long id) throws ServiceException {
+  public boolean delete(Long garageId) throws ServiceException {
     try {
-      return garageDAO.delete(id);
+      boolean deleted = garageDAO.delete(garageId);
+      if (deleted) {
+        // Log the activity
+        activityService.logActivity(
+            "GARAGE", "DELETE", "Garage deleted with ID: " + garageId, "BougaStefa");
+      }
+      return deleted;
     } catch (SQLException e) {
-      throw new ServiceException("Error deleting garage with ID: " + id, e);
+      throw new ServiceException("Error deleting garage", e);
     }
   }
 

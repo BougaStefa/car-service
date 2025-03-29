@@ -7,9 +7,11 @@ import java.util.List;
 
 public class CarService implements CrudService<Car, String> {
   private final CarDAO carDAO;
+  private final ActivityService activityService;
 
   public CarService() {
     this.carDAO = new CarDAO();
+    this.activityService = new ActivityService();
   }
 
   @Override
@@ -46,7 +48,11 @@ public class CarService implements CrudService<Car, String> {
   public String save(Car car) throws ServiceException {
     try {
       validateCar(car);
-      return carDAO.save(car);
+      String id = carDAO.save(car);
+      // Log the activity
+      activityService.logActivity(
+          "CAR", "CREATE", "New car created: " + car.getRegNo(), "BougaStefa");
+      return id;
     } catch (SQLException e) {
       throw new ServiceException("Error saving car", e);
     }
@@ -56,19 +62,30 @@ public class CarService implements CrudService<Car, String> {
   public boolean update(Car car) throws ServiceException {
     try {
       validateCar(car);
-      return carDAO.update(car);
+      boolean updated = carDAO.update(car);
+      if (updated) {
+        // Log the activity
+        activityService.logActivity(
+            "CAR", "UPDATE", "Car updated: " + car.getRegNo(), "BougaStefa");
+      }
+      return updated;
     } catch (SQLException e) {
-      throw new ServiceException(
-          "Error updating car with registration number: " + car.getRegNo(), e);
+      throw new ServiceException("Error updating car", e);
     }
   }
 
   @Override
   public boolean delete(String regNo) throws ServiceException {
     try {
-      return carDAO.delete(regNo);
+      boolean deleted = carDAO.delete(regNo);
+      if (deleted) {
+        // Log the activity
+        activityService.logActivity(
+            "CAR", "DELETE", "Car deleted with RegNo: " + regNo, "BougaStefa");
+      }
+      return deleted;
     } catch (SQLException e) {
-      throw new ServiceException("Error deleting car with registration number: " + regNo, e);
+      throw new ServiceException("Error deleting car", e);
     }
   }
 

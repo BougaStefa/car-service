@@ -8,9 +8,11 @@ import java.util.List;
 
 public class JobService implements CrudService<Job, Long> {
   private final JobDAO jobDAO;
+  private final ActivityService activityService;
 
   public JobService() {
     this.jobDAO = new JobDAO();
+    this.activityService = new ActivityService();
   }
 
   @Override
@@ -55,7 +57,11 @@ public class JobService implements CrudService<Job, Long> {
   public Long save(Job job) throws ServiceException {
     try {
       validateJob(job);
-      return jobDAO.save(job);
+      Long id = jobDAO.save(job);
+      // Log the activity
+      activityService.logActivity(
+          "JOB", "CREATE", "New job created for car: " + job.getRegNo(), "BougaStefa");
+      return id;
     } catch (SQLException e) {
       throw new ServiceException("Error saving job", e);
     }
@@ -65,18 +71,29 @@ public class JobService implements CrudService<Job, Long> {
   public boolean update(Job job) throws ServiceException {
     try {
       validateJob(job);
-      return jobDAO.update(job);
+      boolean updated = jobDAO.update(job);
+      if (updated) {
+        // Log the activity
+        activityService.logActivity(
+            "JOB", "UPDATE", "Job updated for car: " + job.getRegNo(), "BougaStefa");
+      }
+      return updated;
     } catch (SQLException e) {
-      throw new ServiceException("Error updating job with ID: " + job.getJobId(), e);
+      throw new ServiceException("Error updating job", e);
     }
   }
 
   @Override
-  public boolean delete(Long id) throws ServiceException {
+  public boolean delete(Long jobId) throws ServiceException {
     try {
-      return jobDAO.delete(id);
+      boolean deleted = jobDAO.delete(jobId);
+      if (deleted) {
+        // Log the activity
+        activityService.logActivity("JOB", "DELETE", "Job deleted with ID: " + jobId, "BougaStefa");
+      }
+      return deleted;
     } catch (SQLException e) {
-      throw new ServiceException("Error deleting job with ID: " + id, e);
+      throw new ServiceException("Error deleting job", e);
     }
   }
 
