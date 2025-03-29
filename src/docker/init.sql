@@ -40,6 +40,15 @@ CREATE TABLE Job (
     FOREIGN KEY (regNo) REFERENCES Car(regNo)
 );
 
+CREATE TABLE IF NOT EXISTS Activity (
+    activityId BIGINT PRIMARY KEY AUTO_INCREMENT,
+    type VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    timestamp DATETIME NOT NULL,
+    userId VARCHAR(100) NOT NULL,
+    INDEX idx_timestamp (timestamp)
+);
 -- Add indexes for better performance
 CREATE INDEX idx_customer_surname ON Customer(surname);
 CREATE INDEX idx_car_customer ON Car(customerId);

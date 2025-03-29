@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.MainController" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.MainController" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml">
   <padding>
     <Insets bottom="0" left="0" right="0" top="0"></Insets>
   </padding>
@@ -17,11 +17,13 @@
       <MenuItem onAction="#showAbout" text="About"></MenuItem>
     </Menu>
   </MenuBar>
-  <StackPane VBox.vgrow="ALWAYS" fx:id="contentArea"><!-- Content views will be loaded here --></StackPane>
-  <HBox styleClass="status-bar">
+  <StackPane VBox.vgrow="ALWAYS" fx:id="contentArea"></StackPane>
+  <HBox fx:id="statusBar" spacing="20" styleClass="status-bar">
     <padding>
       <Insets bottom="5" left="5" right="5" top="5"></Insets>
     </padding>
-    <Label fx:id="statusLabel" text="Ready"></Label>
+    <Label HBox.hgrow="ALWAYS" fx:id="statusLabel" text="Ready"></Label>
+    <Label fx:id="timeLabel" styleClass="time-label"></Label>
+    <Label fx:id="userLabel" styleClass="user-label"></Label>
   </HBox>
 </VBox>
