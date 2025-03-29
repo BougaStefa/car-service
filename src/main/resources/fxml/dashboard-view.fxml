@@ -39,10 +39,10 @@
     <Label styleClass="section-title" text="Recent Activity"></Label>
     <TableView VBox.vgrow="ALWAYS" fx:id="recentActivityTable">
       <columns>
-        <TableColumn fx:id="timestampColumn" prefWidth="150" text="Time"></TableColumn>
-        <TableColumn fx:id="typeColumn" prefWidth="100" text="Type"></TableColumn>
-        <TableColumn fx:id="actionColumn" prefWidth="100" text="Action"></TableColumn>
-        <TableColumn fx:id="descriptionColumn" prefWidth="400" text="Description"></TableColumn>
+        <TableColumn fx:id="timestampColumn" text="Time"></TableColumn>
+        <TableColumn fx:id="typeColumn" text="Type"></TableColumn>
+        <TableColumn fx:id="actionColumn" text="Action"></TableColumn>
+        <TableColumn fx:id="descriptionColumn" text="Description"></TableColumn>
       </columns>
     </TableView>
   </VBox>
