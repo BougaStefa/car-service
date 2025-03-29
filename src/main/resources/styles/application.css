@@ -165,10 +165,10 @@
   -fx-font-size: 12px;
   -fx-padding: 10px;
 }
+
 .status-bar {
-  -fx-padding: 5;
-  -fx-background-color: #f4f4f4;
-  -fx-border-color: #ddd;
+  -fx-background-color: #f8f9fa;
+  -fx-border-color: #dee2e6;
   -fx-border-width: 1 0 0 0;
 }
 
@@ -194,4 +194,67 @@
 
 .stack-pane {
   -fx-background-color: white;
+}
+
+.dashboard {
+  -fx-background-color: #f8f9fa;
+}
+
+.welcome-text {
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-fill: #2196f3;
+}
+
+.stat-box {
+  -fx-background-color: white;
+  -fx-padding: 20px;
+  -fx-background-radius: 8px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+  -fx-min-width: 200px;
+  -fx-min-height: 150px;
+}
+
+.stat-title {
+  -fx-font-size: 16px;
+  -fx-text-fill: #6c757d;
+}
+
+.stat-number {
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2196f3;
+}
+
+.section-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #495057;
+  -fx-padding: 10 0 5 0;
+}
+
+.quick-actions {
+  -fx-padding: 20px;
+  -fx-background-color: white;
+  -fx-background-radius: 8px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+}
+
+.recent-activity {
+  -fx-padding: 20px;
+  -fx-background-color: white;
+  -fx-background-radius: 8px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+}
+
+.button {
+  -fx-min-width: 120px;
+}
+.time-label {
+  -fx-text-fill: #6c757d;
+}
+
+.user-label {
+  -fx-text-fill: #2196f3;
+  -fx-font-weight: bold;
 }
