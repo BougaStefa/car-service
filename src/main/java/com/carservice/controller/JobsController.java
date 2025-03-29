@@ -159,7 +159,7 @@ public class JobsController {
   }
 
   @FXML
-  private void handleAddJob() {
+  public void handleAddJob() {
     showJobForm(null);
   }
 

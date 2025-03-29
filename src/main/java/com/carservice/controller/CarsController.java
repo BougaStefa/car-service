@@ -164,7 +164,7 @@ public class CarsController {
   }
 
   @FXML
-  private void handleAddCar() {
+  public void handleAddCar() {
     showCarForm(null);
   }
 

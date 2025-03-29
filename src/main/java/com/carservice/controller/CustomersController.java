@@ -121,7 +121,7 @@ public class CustomersController {
   }
 
   @FXML
-  private void handleAddCustomer() {
+  public void handleAddCustomer() {
     showCustomerForm(null);
   }
 
