@@ -5,16 +5,24 @@
   </padding>
   <MenuBar>
     <Menu text="File">
-      <MenuItem onAction="#handleExit" text="Exit"></MenuItem>
+      <MenuItem onAction="#showDashboard" text="Dashboard" accelerator="Shortcut+D"/>
+      <SeparatorMenuItem />
+      <MenuItem onAction="#handleExit" text="Exit" accelerator="Shortcut+Q"/>
     </Menu>
-    <Menu text="Manage">
-      <MenuItem onAction="#showCustomers" text="Customers"></MenuItem>
-      <MenuItem onAction="#showCars" text="Cars"></MenuItem>
-      <MenuItem onAction="#showGarages" text="Garages"></MenuItem>
-      <MenuItem onAction="#showJobs" text="Jobs"></MenuItem>
+    <Menu text="View">
+      <MenuItem onAction="#showCustomers" text="Customers" accelerator="Shortcut+1"/>
+      <MenuItem onAction="#showCars" text="Cars" accelerator="Shortcut+2"/>
+      <MenuItem onAction="#showGarages" text="Garages" accelerator="Shortcut+3"/>
+      <MenuItem onAction="#showJobs" text="Jobs" accelerator="Shortcut+4"/>
+    </Menu>
+    <Menu text="Create">
+      <MenuItem onAction="#showNewCustomerForm" text="New Customer" accelerator="Shortcut+Alt+1"/>
+      <MenuItem onAction="#showNewCarForm" text="New Car" accelerator="Shortcut+Alt+2"/>
+      <MenuItem onAction="#showNewGarageForm" text="New Garage" accelerator="Shortcut+Alt+3"/>
+      <MenuItem onAction="#showNewJobForm" text="New Job" accelerator="Shortcut+Alt+4"/>
     </Menu>
     <Menu text="Help">
-      <MenuItem onAction="#showAbout" text="About"></MenuItem>
+      <MenuItem onAction="#showAbout" text="About" accelerator="F1"/>
     </Menu>
   </MenuBar>
   <StackPane VBox.vgrow="ALWAYS" fx:id="contentArea"></StackPane>

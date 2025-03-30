@@ -3,6 +3,7 @@ package com.carservice.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -154,7 +155,8 @@ public class MainController {
     alert.showAndWait();
   }
 
-  private void showDashboard() {
+  @FXML
+  public void showDashboard() {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dashboard-view.fxml"));
       Parent view = loader.load();
