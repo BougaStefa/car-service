@@ -97,6 +97,18 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  public Double getAverageServiceCostByCustomer(Long customerId) throws ServiceException {
+    try {
+      if (customerId == null) {
+        throw new ServiceException("Customer ID cannot be null");
+      }
+      return jobDAO.getAverageServiceCostByCustomer(customerId);
+    } catch (SQLException e) {
+      throw new ServiceException(
+          "Error calculating average service cost for customer ID: " + customerId, e);
+    }
+  }
+
   private void validateJob(Job job) throws ServiceException {
     if (job.getDateIn() == null) {
       throw new ServiceException("Job date in cannot be null");

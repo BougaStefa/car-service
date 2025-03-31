@@ -2,6 +2,7 @@ package com.carservice.controller;
 
 import com.carservice.model.Customer;
 import com.carservice.service.CustomerService;
+import com.carservice.service.JobService;
 import com.carservice.service.ServiceException;
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,7 @@ import javafx.stage.Stage;
 
 public class CustomersController {
   private final CustomerService customerService;
+  private final JobService jobService;
   private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
   @FXML private TextField searchField;
@@ -29,10 +31,12 @@ public class CustomersController {
   @FXML private TableColumn<Customer, String> addressColumn;
   @FXML private TableColumn<Customer, String> postCodeColumn;
   @FXML private TableColumn<Customer, String> phoneColumn;
+  @FXML private TableColumn<Customer, Double> avgServiceCostColumn;
   @FXML private TableColumn<Customer, Void> actionsColumn;
 
   public CustomersController() {
     this.customerService = new CustomerService();
+    this.jobService = new JobService();
   }
 
   @FXML
@@ -48,6 +52,35 @@ public class CustomersController {
     addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
     postCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postCode"));
     phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
+    // Set up average cost column to calculate value for each customer
+    avgServiceCostColumn.setCellValueFactory(
+        cellData -> {
+          Customer customer = cellData.getValue();
+          try {
+            Double avgCost = jobService.getAverageServiceCostByCustomer(customer.getCustomerId());
+            return new javafx.beans.property.SimpleDoubleProperty(avgCost != null ? avgCost : 0.0)
+                .asObject();
+          } catch (ServiceException e) {
+            showError("Error calculating average cost: " + e.getMessage());
+            return new javafx.beans.property.SimpleDoubleProperty(0.0).asObject();
+          }
+        });
+
+    // Format average cost column to show currency
+    avgServiceCostColumn.setCellFactory(
+        column ->
+            new TableCell<>() {
+              @Override
+              protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                  setText(null);
+                } else {
+                  setText(String.format("£%.2f", item));
+                }
+              }
+            });
+
     setupActionsColumn();
   }
 

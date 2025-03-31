@@ -21,6 +21,7 @@
       <TableColumn fx:id="addressColumn" text="Address"></TableColumn>
       <TableColumn fx:id="postCodeColumn" text="Post Code"></TableColumn>
       <TableColumn fx:id="phoneColumn" text="Phone"></TableColumn>
+      <TableColumn fx:id="avgServiceCostColumn" text="Avg. Service Cost"></TableColumn>
       <TableColumn fx:id="actionsColumn" text="Actions"></TableColumn>
     </columns>
   </TableView>

@@ -16,6 +16,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
   private static final String DELETE = "DELETE FROM Job WHERE jobId = ?";
   private static final String FIND_BY_CAR = "SELECT * FROM Job WHERE regNo = ?";
   private static final String FIND_BY_GARAGE = "SELECT * FROM Job WHERE garageId = ?";
+  private static final String GET_AVG_COST_BY_CUSTOMER =
+      "SELECT AVG(j.cost) as avgCost "
+          + "FROM Job j "
+          + "INNER JOIN Car c ON j.regNo = c.regNo "
+          + "WHERE c.customerId = ? "
+          + "AND j.cost IS NOT NULL "
+          + "AND j.dateOut IS NOT NULL";
 
   @Override
   public Job findById(Long id) throws SQLException {
@@ -104,6 +111,20 @@ public class JobDAO implements CrudDAO<Job, Long> {
       stmt.setLong(1, id);
       return stmt.executeUpdate() > 0;
     }
+  }
+
+  public Double getAverageServiceCostByCustomer(Long customerId) throws SQLException {
+    try (Connection conn = DatabaseConfig.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(GET_AVG_COST_BY_CUSTOMER)) {
+      stmt.setLong(1, customerId);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          double avgCost = rs.getDouble("avgCost");
+          return rs.wasNull() ? 0.0 : avgCost;
+        }
+      }
+    }
+    return 0.0;
   }
 
   private Job mapRowToJob(ResultSet rs) throws SQLException {
