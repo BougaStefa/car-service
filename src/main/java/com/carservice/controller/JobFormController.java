@@ -2,10 +2,12 @@ package com.carservice.controller;
 
 import com.carservice.model.Job;
 import com.carservice.service.JobService;
+import com.carservice.service.PaymentService;
 import com.carservice.service.ServiceException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -20,6 +22,7 @@ public class JobFormController {
   @FXML private TextField costField;
 
   private JobService jobService;
+  private PaymentService paymentService = new PaymentService();
   private Job job;
   private boolean isEditMode;
   private Runnable onSaveCallback;
@@ -29,6 +32,7 @@ public class JobFormController {
     jobService = new JobService();
   }
 
+  // !TODO: Add complete job action that sets t he date to today and asks for payment.
   public void setJob(Job job) {
     this.job = job;
     this.isEditMode = job != null;
@@ -66,6 +70,7 @@ public class JobFormController {
     try {
       if (isEditMode) {
         updateJob();
+        handlePayment(job);
       } else {
         createJob();
       }
@@ -195,9 +200,54 @@ public class JobFormController {
     return true;
   }
 
+  private void handlePayment(Job job) throws ServiceException {
+    if (job.getDateOut() != null) {
+      // Show payment dialog
+      Dialog<String> dialog = new Dialog<>();
+      dialog.setTitle("Process Payment");
+      dialog.setHeaderText("Select Payment Method");
+
+      ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+      dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+
+      ComboBox<String> paymentMethodCombo = new ComboBox<>();
+      paymentMethodCombo.getItems().addAll("CASH", "CARD", "TRANSFER");
+      paymentMethodCombo.setValue("CASH");
+
+      dialog.getDialogPane().setContent(paymentMethodCombo);
+
+      dialog.setResultConverter(
+          dialogButton -> {
+            if (dialogButton == confirmButtonType) {
+              return paymentMethodCombo.getValue();
+            }
+            return null;
+          });
+
+      Optional<String> result = dialog.showAndWait();
+      result.ifPresent(
+          paymentMethod -> {
+            try {
+              paymentService.processJobPayment(job.getJobId(), paymentMethod);
+              showInfo("Payment processed successfully");
+            } catch (ServiceException e) {
+              showError("Error processing payment: " + e.getMessage());
+            }
+          });
+    }
+  }
+
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
+
+  private void showInfo(String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Information");
     alert.setHeaderText(null);
     alert.setContentText(message);
     alert.showAndWait();
