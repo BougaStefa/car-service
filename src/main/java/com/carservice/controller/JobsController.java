@@ -2,11 +2,13 @@ package com.carservice.controller;
 
 import com.carservice.model.Job;
 import com.carservice.service.JobService;
+import com.carservice.service.PaymentService;
 import com.carservice.service.ServiceException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -94,26 +96,109 @@ public class JobsController {
     setupActionsColumn();
   }
 
+  private void handleCompleteJob(Job job) {
+    if (job.getDateOut() != null) {
+      showError("Job is already completed");
+      return;
+    }
+
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Complete Job");
+    alert.setHeaderText("Complete Job and Process Payment");
+    alert.setContentText("Are you sure you want to complete job ID: " + job.getJobId() + "?");
+
+    alert
+        .showAndWait()
+        .ifPresent(
+            response -> {
+              if (response == ButtonType.OK) {
+                // Set completion date to now
+                job.setDateOut(LocalDateTime.now());
+
+                // Show payment dialog
+                Dialog<String> paymentDialog = new Dialog<>();
+                paymentDialog.setTitle("Process Payment");
+                paymentDialog.setHeaderText("Select Payment Method");
+
+                ButtonType confirmButtonType =
+                    new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+                paymentDialog
+                    .getDialogPane()
+                    .getButtonTypes()
+                    .addAll(confirmButtonType, ButtonType.CANCEL);
+
+                ComboBox<String> paymentMethodCombo = new ComboBox<>();
+                paymentMethodCombo.getItems().addAll("CASH", "CARD", "TRANSFER");
+                paymentMethodCombo.setValue("CASH");
+
+                paymentDialog.getDialogPane().setContent(paymentMethodCombo);
+
+                paymentDialog.setResultConverter(
+                    dialogButton -> {
+                      if (dialogButton == confirmButtonType) {
+                        return paymentMethodCombo.getValue();
+                      }
+                      return null;
+                    });
+
+                Optional<String> result = paymentDialog.showAndWait();
+                result.ifPresent(
+                    paymentMethod -> {
+                      try {
+                        // Update the job first
+                        jobService.update(job);
+
+                        // Process the payment
+                        PaymentService paymentService = new PaymentService();
+                        paymentService.processJobPayment(job.getJobId(), paymentMethod);
+
+                        // Refresh the table
+                        loadJobs();
+                        showInfo("Job completed and payment processed successfully");
+                      } catch (ServiceException e) {
+                        showError("Error processing payment: " + e.getMessage());
+                      }
+                    });
+              }
+            });
+  }
+
   private void setupActionsColumn() {
     actionsColumn.setCellFactory(
         param ->
             new TableCell<>() {
               private final Button editButton = new Button("Edit");
               private final Button deleteButton = new Button("Delete");
-              private final HBox buttons = new HBox(5, editButton, deleteButton);
+              private final Button completeButton = new Button("Complete");
+              private final HBox buttons = new HBox(5, editButton, deleteButton, completeButton);
 
               {
                 buttons.setAlignment(Pos.CENTER);
-                editButton.setOnAction(
-                    event -> handleEditJob(getTableView().getItems().get(getIndex())));
-                deleteButton.setOnAction(
-                    event -> handleDeleteJob(getTableView().getItems().get(getIndex())));
               }
 
               @Override
               protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : buttons);
+
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                  setGraphic(null);
+                  return;
+                }
+
+                Job currentJob = getTableView().getItems().get(getIndex());
+                if (currentJob == null) {
+                  setGraphic(null);
+                  return;
+                }
+
+                setGraphic(buttons);
+
+                editButton.setOnAction(event -> handleEditJob(currentJob));
+                deleteButton.setOnAction(event -> handleDeleteJob(currentJob));
+                completeButton.setOnAction(event -> handleCompleteJob(currentJob));
+
+                // Disable complete button if job is already completed
+                completeButton.setDisable(currentJob.getDateOut() != null);
               }
             });
   }

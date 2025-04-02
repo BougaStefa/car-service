@@ -32,7 +32,6 @@ public class JobFormController {
     jobService = new JobService();
   }
 
-  // !TODO: Add complete job action that sets t he date to today and asks for payment.
   public void setJob(Job job) {
     this.job = job;
     this.isEditMode = job != null;
