@@ -4,6 +4,7 @@ import com.carservice.model.Car;
 import com.carservice.model.Customer;
 import com.carservice.service.CarService;
 import com.carservice.service.CustomerService;
+import com.carservice.service.JobService;
 import com.carservice.service.ServiceException;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,7 @@ import javafx.util.StringConverter;
 
 public class CarsController {
   private final CarService carService;
+  private final JobService jobService;
   private final CustomerService customerService;
   private final ObservableList<Car> carList = FXCollections.observableArrayList();
   private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
@@ -34,10 +36,12 @@ public class CarsController {
   @FXML private TableColumn<Car, String> modelColumn;
   @FXML private TableColumn<Car, Integer> yearColumn;
   @FXML private TableColumn<Car, Customer> customerColumn;
+  @FXML private TableColumn<Car, Long> totalServiceDaysColumn;
   @FXML private TableColumn<Car, Void> actionsColumn;
 
   public CarsController() {
     this.carService = new CarService();
+    this.jobService = new JobService();
     this.customerService = new CustomerService();
   }
 
@@ -106,6 +110,17 @@ public class CarsController {
                 }
               }
             });
+    totalServiceDaysColumn.setCellValueFactory(
+        cellData -> {
+          Car car = cellData.getValue();
+          try {
+            long days = jobService.calculateTotalServiceDays(car.getRegNo());
+            return new SimpleObjectProperty<>(days);
+          } catch (ServiceException e) {
+            showError("Error calculating service days: " + e.getMessage());
+            return new SimpleObjectProperty<>(0L);
+          }
+        });
 
     setupActionsColumn();
   }

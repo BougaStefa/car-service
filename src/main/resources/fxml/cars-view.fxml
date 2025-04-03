@@ -19,6 +19,7 @@
       <TableColumn fx:id="modelColumn" text="Model"></TableColumn>
       <TableColumn fx:id="yearColumn" text="Year"></TableColumn>
       <TableColumn fx:id="customerColumn" text="Customer"></TableColumn>
+      <TableColumn fx:id="totalServiceDaysColumn" text="Total Service Days"></TableColumn>
       <TableColumn fx:id="actionsColumn" text="Actions"></TableColumn>
     </columns>
   </TableView>

@@ -109,6 +109,29 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  public long calculateTotalServiceDays(String regNo) throws ServiceException {
+    try {
+      if (regNo == null || regNo.trim().isEmpty()) {
+        throw new ServiceException("Registration number cannot be null or empty");
+      }
+
+      List<Job> jobs = findByCar(regNo);
+      long totalDays = 0;
+      LocalDateTime now = LocalDateTime.now();
+
+      for (Job job : jobs) {
+        LocalDateTime outDate = job.getDateOut() != null ? job.getDateOut() : now;
+        // Adding 1 to count the start day
+        long days = java.time.Duration.between(job.getDateIn(), outDate).toDays() + 1;
+        totalDays += days;
+      }
+
+      return totalDays;
+    } catch (ServiceException e) {
+      throw new ServiceException("Error calculating total service days for car: " + regNo, e);
+    }
+  }
+
   private void validateJob(Job job) throws ServiceException {
     if (job.getDateIn() == null) {
       throw new ServiceException("Job date in cannot be null");
