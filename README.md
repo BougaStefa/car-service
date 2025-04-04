@@ -76,7 +76,22 @@ The system connects to a MariaDB database named `carservice`. Make sure to confi
 #### Cost Analysis
 - Calculates average service costs per customer
 - Provides cost insights for business analysis
+## How to Run
 
+1. **Start Database**
+   ```bash
+   # Start all services using Docker Compose
+   cd src/docker
+   docker compose up -d
+   ```
+
+2. **Build & Run Application**
+   - Ensure Java 11 or higher is installed
+   - Build the project: `mvn clean install`
+   - Run the application: `mvn javafx:run`
+
+The application will automatically connect to the database using the configuration in `src/main/resources/database.properties` and create necessary tables on first run.
+`.
 ## Usage
 
 1. Launch the application
