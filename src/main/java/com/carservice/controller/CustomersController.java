@@ -24,6 +24,7 @@ public class CustomersController {
   private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
   @FXML private TextField searchField;
+  @FXML private Button clearFilterButton;
   @FXML private TableView<Customer> customerTable;
   @FXML private TableColumn<Customer, Long> idColumn;
   @FXML private TableColumn<Customer, String> forenameColumn;
@@ -151,6 +152,12 @@ public class CustomersController {
     } catch (ServiceException e) {
       showError("Error searching customers: " + e.getMessage());
     }
+  }
+
+  @FXML
+  private void handleClearFilter() {
+    searchField.clear();
+    loadCustomers();
   }
 
   @FXML

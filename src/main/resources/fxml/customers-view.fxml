@@ -10,6 +10,7 @@
     <Label text="Search by Surname:"></Label>
     <TextField fx:id="searchField" promptText="Enter surname..."></TextField>
     <Button onAction="#handleSearch" text="Search"></Button>
+    <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
     <Region HBox.hgrow="ALWAYS"></Region>
     <Button onAction="#handleAddCustomer" text="Add New Customer"></Button>
   </HBox>

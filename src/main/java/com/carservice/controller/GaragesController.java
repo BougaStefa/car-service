@@ -22,6 +22,7 @@ public class GaragesController {
   private final ObservableList<Garage> garageList = FXCollections.observableArrayList();
 
   @FXML private TextField searchField;
+  @FXML private Button clearFilterButton;
   @FXML private TableView<Garage> garageTable;
   @FXML private TableColumn<Garage, Long> idColumn;
   @FXML private TableColumn<Garage, String> nameColumn;
@@ -100,6 +101,12 @@ public class GaragesController {
     } catch (ServiceException e) {
       showError("Error searching garages: " + e.getMessage());
     }
+  }
+
+  @FXML
+  private void handleClearFilter() {
+    searchField.clear();
+    loadGarages();
   }
 
   @FXML

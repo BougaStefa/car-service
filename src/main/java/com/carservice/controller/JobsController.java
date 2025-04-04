@@ -29,6 +29,7 @@ public class JobsController {
 
   @FXML private TextField searchField;
   @FXML private ComboBox<String> filterType;
+  @FXML private Button clearFilterButton;
   @FXML private TableView<Job> jobTable;
   @FXML private TableColumn<Job, Long> idColumn;
   @FXML private TableColumn<Job, Long> garageIdColumn;
@@ -241,6 +242,13 @@ public class JobsController {
     } catch (ServiceException e) {
       showError("Error searching jobs: " + e.getMessage());
     }
+  }
+
+  @FXML
+  private void handleClearFilter() {
+    searchField.clear();
+    filterType.setValue("All");
+    loadJobs();
   }
 
   @FXML

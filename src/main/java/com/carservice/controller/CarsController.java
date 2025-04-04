@@ -30,6 +30,7 @@ public class CarsController {
   private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
   @FXML private ComboBox<Customer> customerFilter;
+  @FXML private Button clearFilterButton;
   @FXML private TableView<Car> carTable;
   @FXML private TableColumn<Car, String> regNoColumn;
   @FXML private TableColumn<Car, String> makeColumn;
@@ -181,6 +182,12 @@ public class CarsController {
   @FXML
   public void handleAddCar() {
     showCarForm(null);
+  }
+
+  @FXML
+  public void handleClearFilter() {
+    customerFilter.setValue(null);
+    loadCars();
   }
 
   private void handleEditCar(Car car) {

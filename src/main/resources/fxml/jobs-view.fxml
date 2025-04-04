@@ -7,6 +7,7 @@
     <ComboBox fx:id="filterType" prefWidth="120"></ComboBox>
     <TextField HBox.hgrow="ALWAYS" fx:id="searchField" promptText="Search..."></TextField>
     <Button onAction="#handleSearch" text="Search"></Button>
+    <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
     <Button onAction="#handleAddJob" text="Add New Job"></Button>
   </HBox>
   <TableView VBox.vgrow="ALWAYS" fx:id="jobTable">

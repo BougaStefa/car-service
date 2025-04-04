@@ -9,6 +9,7 @@
     </padding>
     <Label text="Filter by Customer:"></Label>
     <ComboBox fx:id="customerFilter" promptText="Select Customer"></ComboBox>
+    <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
     <Region HBox.hgrow="ALWAYS"></Region>
     <Button onAction="#handleAddCar" text="Add New Car"></Button>
   </HBox>
