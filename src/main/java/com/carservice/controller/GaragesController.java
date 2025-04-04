@@ -39,7 +39,17 @@ public class GaragesController {
   @FXML
   private void initialize() {
     setupTableColumns();
+    setupSearchField();
     loadGarages();
+  }
+
+  private void setupSearchField() {
+    searchField.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+            handleSearch();
+          }
+        });
   }
 
   private void setupTableColumns() {

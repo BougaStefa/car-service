@@ -47,7 +47,17 @@ public class JobsController {
   private void initialize() {
     setupFilterType();
     setupTableColumns();
+    setupSearchField();
     loadJobs();
+  }
+
+  private void setupSearchField() {
+    searchField.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+            handleSearch();
+          }
+        });
   }
 
   private void setupFilterType() {

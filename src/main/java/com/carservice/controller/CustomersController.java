@@ -43,7 +43,17 @@ public class CustomersController {
   @FXML
   private void initialize() {
     setupTableColumns();
+    setupSearchField();
     loadCustomers();
+  }
+
+  private void setupSearchField() {
+    searchField.setOnKeyPressed(
+        event -> {
+          if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+            handleSearch();
+          }
+        });
   }
 
   private void setupTableColumns() {
