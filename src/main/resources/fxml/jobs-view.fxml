@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><VBox fx:controller="com.carservice.controller.JobsController" spacing="10" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Jobs View - Main interface for service job management --><?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><VBox fx:controller="com.carservice.controller.JobsController" spacing="10" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main container padding -->
   <padding>
     <Insets bottom="20" left="20" right="20" top="20"></Insets>
   </padding>
+  <!-- Toolbar section with search and filter controls -->
   <HBox alignment="CENTER_LEFT" spacing="10">
     <ComboBox fx:id="filterType" prefWidth="120"></ComboBox>
     <TextField HBox.hgrow="ALWAYS" fx:id="searchField" promptText="Search..."></TextField>
@@ -10,14 +12,17 @@
     <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
     <Button onAction="#handleAddJob" text="Add New Job"></Button>
   </HBox>
+  <!-- Main jobs data table -->
   <TableView VBox.vgrow="ALWAYS" fx:id="jobTable">
     <columns>
+      <!-- Job information columns -->
       <TableColumn fx:id="idColumn" text="Job ID"></TableColumn>
       <TableColumn fx:id="garageIdColumn" text="Garage ID"></TableColumn>
       <TableColumn fx:id="regNoColumn" text="Reg. No."></TableColumn>
       <TableColumn fx:id="dateInColumn" text="Date In"></TableColumn>
       <TableColumn fx:id="dateOutColumn" text="Date Out"></TableColumn>
       <TableColumn fx:id="costColumn" text="Cost"></TableColumn>
+      <!-- Operations column -->
       <TableColumn fx:id="actionsColumn" text="Actions"></TableColumn>
     </columns>
   </TableView>

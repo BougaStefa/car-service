@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.CarsController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Cars View - Main interface for displaying and managing cars --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.CarsController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+  <!-- Overall padding for the main container -->
   <padding>
     <Insets bottom="10" left="10" right="10" top="10"></Insets>
   </padding>
+  <!-- Toolbar section with filter and actions -->
   <HBox alignment="CENTER_LEFT" spacing="10">
     <padding>
       <Insets bottom="10" left="0" right="0" top="0"></Insets>
     </padding>
+    <!-- Customer filtering controls -->
     <Label text="Filter by Customer:"></Label>
     <ComboBox fx:id="customerFilter" promptText="Select Customer"></ComboBox>
     <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
+    <!-- Flexible space between filter and add button -->
     <Region HBox.hgrow="ALWAYS"></Region>
+    <!-- Add new car action button -->
     <Button onAction="#handleAddCar" text="Add New Car"></Button>
   </HBox>
+  <!-- Main table view for displaying cars -->
   <TableView VBox.vgrow="ALWAYS" fx:id="carTable">
     <columns>
+      <!-- Table columns for car properties -->
       <TableColumn fx:id="regNoColumn" text="Registration No"></TableColumn>
       <TableColumn fx:id="makeColumn" text="Make"></TableColumn>
       <TableColumn fx:id="modelColumn" text="Model"></TableColumn>

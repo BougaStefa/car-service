@@ -1,41 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.carservice.controller.CustomerFormController"
-      spacing="10">
-    
+<!-- JavaFX FXML Customer Form - Interface for adding/editing customer details --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.CustomerFormController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main form padding -->
+  <padding>
+    <Insets bottom="20" left="20" right="20" top="20"></Insets>
+  </padding>
+  <!-- Grid layout for form fields with 10px spacing -->
+  <GridPane hgap="10" vgap="10">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+      <Insets bottom="10"></Insets>
     </padding>
-
-    <GridPane hgap="10" vgap="10">
-        <padding>
-            <Insets bottom="10"/>
-        </padding>
-
-        <Label text="Forename:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="forenameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-        <Label text="Surname:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="surnameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-        <Label text="Address:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="addressField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-
-        <Label text="Post Code:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="postCodeField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-
-        <Label text="Phone:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <TextField fx:id="phoneField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-    </GridPane>
-
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Save" onAction="#handleSave" defaultButton="true"/>
-        <Button text="Cancel" onAction="#handleCancel" cancelButton="true"/>
-    </HBox>
+    <!-- Personal Information Fields -->
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="0" text="Forename:"></Label>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="forenameField"></TextField>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="1" text="Surname:"></Label>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="surnameField"></TextField>
+    <!-- Contact Information Fields -->
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Address:"></Label>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="addressField"></TextField>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Post Code:"></Label>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="postCodeField"></TextField>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="4" text="Phone:"></Label>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="phoneField"></TextField>
+  </GridPane>
+  <!-- Action buttons aligned to the right -->
+  <HBox alignment="CENTER_RIGHT" spacing="10">
+    <Button defaultButton="true" onAction="#handleSave" text="Save"></Button>
+    <Button cancelButton="true" onAction="#handleCancel" text="Cancel"></Button>
+  </HBox>
 </VBox>

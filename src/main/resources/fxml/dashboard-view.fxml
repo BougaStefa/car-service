@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.scene.text.Text?><VBox alignment="CENTER" fx:controller="com.carservice.controller.DashboardController" spacing="20" styleClass="dashboard" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Dashboard View - Main overview interface for the Car Service Management System --><?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.scene.text.Text?><VBox alignment="CENTER" fx:controller="com.carservice.controller.DashboardController" spacing="20" styleClass="dashboard" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main container padding -->
   <padding>
     <Insets bottom="20" left="20" right="20" top="20"></Insets>
   </padding>
+  <!-- Dashboard header -->
   <Text styleClass="welcome-heading" text="Welcome to Car Service Management System"></Text>
+  <!-- Statistics Overview Section -->
   <HBox alignment="CENTER" spacing="20">
+    <!-- Customers Statistics Box -->
     <VBox alignment="CENTER" spacing="10" styleClass="stat-box">
       <Label styleClass="stat-title" text="Customers"></Label>
       <Label fx:id="customerCount" styleClass="stat-number" text="0"></Label>
       <Button onAction="#navigateToCustomers" text="Manage Customers"></Button>
     </VBox>
+    <!-- Cars Statistics Box -->
     <VBox alignment="CENTER" spacing="10" styleClass="stat-box">
       <Label styleClass="stat-title" text="Cars"></Label>
       <Label fx:id="carCount" styleClass="stat-number" text="0"></Label>
       <Button onAction="#navigateToCars" text="Manage Cars"></Button>
     </VBox>
+    <!-- Active Jobs Statistics Box -->
     <VBox alignment="CENTER" spacing="10" styleClass="stat-box">
       <Label styleClass="stat-title" text="Active Jobs"></Label>
       <Label fx:id="activeJobCount" styleClass="stat-number" text="0"></Label>
       <Button onAction="#navigateToJobs" text="Manage Jobs"></Button>
     </VBox>
+    <!-- Garages Statistics Box -->
     <VBox alignment="CENTER" spacing="10" styleClass="stat-box">
       <Label styleClass="stat-title" text="Garages"></Label>
       <Label fx:id="garageCount" styleClass="stat-number" text="0"></Label>
       <Button onAction="#navigateToGarages" text="Manage Garages"></Button>
     </VBox>
   </HBox>
+  <!-- Quick Actions Section -->
   <VBox spacing="10" styleClass="quick-actions">
     <Label styleClass="quick-actions-heading" text="Quick Actions"></Label>
     <HBox alignment="CENTER" spacing="10">
@@ -35,6 +43,7 @@
       <Button onAction="#addNewGarage" text="New Garage"></Button>
     </HBox>
   </VBox>
+  <!-- Recent Activity Section with Table -->
   <VBox VBox.vgrow="ALWAYS" spacing="10" styleClass="recent-activity">
     <Label styleClass="quick-actions-heading" text="Recent Activity"></Label>
     <TableView VBox.vgrow="ALWAYS" fx:id="recentActivityTable">

@@ -21,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+// !TODO: Add filters for date and maybe status(completed, ongoing etc.)
 public class JobsController {
   private final JobService jobService;
   private final ObservableList<Job> jobList = FXCollections.observableArrayList();

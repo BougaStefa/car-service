@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.MainController" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Main View - Primary application window layout --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.MainController" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml">
+  <!-- Top-level container padding -->
   <padding>
     <Insets bottom="0" left="0" right="0" top="0"></Insets>
   </padding>
+  <!-- Application Menu Bar -->
   <MenuBar>
+    <!-- File Menu - Basic application operations -->
     <Menu text="File">
-      <MenuItem onAction="#showDashboard" text="Dashboard" accelerator="Shortcut+D"/>
-      <SeparatorMenuItem />
-      <MenuItem onAction="#handleExit" text="Exit" accelerator="Shortcut+Q"/>
+      <MenuItem accelerator="Shortcut+D" onAction="#showDashboard" text="Dashboard"></MenuItem>
+      <SeparatorMenuItem></SeparatorMenuItem>
+      <MenuItem accelerator="Shortcut+Q" onAction="#handleExit" text="Exit"></MenuItem>
     </Menu>
+    <!-- View Menu - Navigation to main data views -->
     <Menu text="View">
-      <MenuItem onAction="#showCustomers" text="Customers" accelerator="Shortcut+1"/>
-      <MenuItem onAction="#showCars" text="Cars" accelerator="Shortcut+2"/>
-      <MenuItem onAction="#showGarages" text="Garages" accelerator="Shortcut+3"/>
-      <MenuItem onAction="#showJobs" text="Jobs" accelerator="Shortcut+4"/>
+      <MenuItem accelerator="Shortcut+1" onAction="#showCustomers" text="Customers"></MenuItem>
+      <MenuItem accelerator="Shortcut+2" onAction="#showCars" text="Cars"></MenuItem>
+      <MenuItem accelerator="Shortcut+3" onAction="#showGarages" text="Garages"></MenuItem>
+      <MenuItem accelerator="Shortcut+4" onAction="#showJobs" text="Jobs"></MenuItem>
     </Menu>
+    <!-- Create Menu - Quick access to new item forms -->
     <Menu text="Create">
-      <MenuItem onAction="#showNewCustomerForm" text="New Customer" accelerator="Shortcut+Alt+1"/>
-      <MenuItem onAction="#showNewCarForm" text="New Car" accelerator="Shortcut+Alt+2"/>
-      <MenuItem onAction="#showNewGarageForm" text="New Garage" accelerator="Shortcut+Alt+3"/>
-      <MenuItem onAction="#showNewJobForm" text="New Job" accelerator="Shortcut+Alt+4"/>
+      <MenuItem accelerator="Shortcut+Alt+1" onAction="#showNewCustomerForm" text="New Customer"></MenuItem>
+      <MenuItem accelerator="Shortcut+Alt+2" onAction="#showNewCarForm" text="New Car"></MenuItem>
+      <MenuItem accelerator="Shortcut+Alt+3" onAction="#showNewGarageForm" text="New Garage"></MenuItem>
+      <MenuItem accelerator="Shortcut+Alt+4" onAction="#showNewJobForm" text="New Job"></MenuItem>
     </Menu>
+    <!-- Help Menu -->
     <Menu text="Help">
-      <MenuItem onAction="#showAbout" text="About" accelerator="F1"/>
+      <MenuItem accelerator="F1" onAction="#showAbout" text="About"></MenuItem>
     </Menu>
   </MenuBar>
+  <!-- Main content area - Displays current view -->
   <StackPane VBox.vgrow="ALWAYS" fx:id="contentArea"></StackPane>
+  <!-- Status Bar - Shows application status and info -->
   <HBox fx:id="statusBar" spacing="20" styleClass="status-bar">
     <padding>
       <Insets bottom="5" left="5" right="5" top="5"></Insets>

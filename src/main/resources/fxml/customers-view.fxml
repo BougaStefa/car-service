@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.CustomersController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Customers View - Main interface for customer management --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.CustomersController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main container padding -->
   <padding>
     <Insets bottom="10" left="10" right="10" top="10"></Insets>
   </padding>
+  <!-- Toolbar section with search functionality -->
   <HBox alignment="CENTER_LEFT" spacing="10">
     <padding>
       <Insets bottom="10" left="0" right="0" top="0"></Insets>
     </padding>
+    <!-- Search controls -->
     <Label text="Search by Surname:"></Label>
     <TextField fx:id="searchField" promptText="Enter surname..."></TextField>
     <Button onAction="#handleSearch" text="Search"></Button>
     <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
+    <!-- Flexible space between search and add button -->
     <Region HBox.hgrow="ALWAYS"></Region>
+    <!-- Add new customer action button -->
     <Button onAction="#handleAddCustomer" text="Add New Customer"></Button>
   </HBox>
+  <!-- Main customer data table -->
   <TableView VBox.vgrow="ALWAYS" fx:id="customerTable">
     <columns>
+      <!-- Customer information columns -->
       <TableColumn fx:id="idColumn" text="ID"></TableColumn>
       <TableColumn fx:id="forenameColumn" text="Forename"></TableColumn>
       <TableColumn fx:id="surnameColumn" text="Surname"></TableColumn>
       <TableColumn fx:id="addressColumn" text="Address"></TableColumn>
       <TableColumn fx:id="postCodeColumn" text="Post Code"></TableColumn>
       <TableColumn fx:id="phoneColumn" text="Phone"></TableColumn>
+      <!-- Statistics column -->
       <TableColumn fx:id="avgServiceCostColumn" text="Avg. Service Cost"></TableColumn>
+      <!-- Operations column -->
       <TableColumn fx:id="actionsColumn" text="Actions"></TableColumn>
     </columns>
   </TableView>

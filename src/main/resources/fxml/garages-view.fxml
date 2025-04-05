@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.GaragesController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Garages View - Main interface for garage management --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.GaragesController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main container padding -->
   <padding>
     <Insets bottom="10" left="10" right="10" top="10"></Insets>
   </padding>
+  <!-- Toolbar section with search functionality -->
   <HBox alignment="CENTER_LEFT" spacing="10">
     <padding>
       <Insets bottom="10" left="0" right="0" top="0"></Insets>
     </padding>
+    <!-- Search controls -->
     <Label text="Search:"></Label>
     <TextField fx:id="searchField" promptText="Search by name..."></TextField>
     <Button onAction="#handleSearch" text="Search"></Button>
     <Button fx:id="clearFilterButton" onAction="#handleClearFilter" text="Clear Filter"></Button>
+    <!-- Flexible space between search and add button -->
     <Region HBox.hgrow="ALWAYS"></Region>
+    <!-- Add new garage action button -->
     <Button onAction="#handleAddGarage" text="Add New Garage"></Button>
   </HBox>
+  <!-- Main garage data table -->
   <TableView VBox.vgrow="ALWAYS" fx:id="garageTable">
     <columns>
+      <!-- Garage information columns -->
       <TableColumn fx:id="idColumn" text="ID"></TableColumn>
       <TableColumn fx:id="nameColumn" text="Name"></TableColumn>
       <TableColumn fx:id="addressColumn" text="Address"></TableColumn>
       <TableColumn fx:id="townColumn" text="Town"></TableColumn>
       <TableColumn fx:id="postCodeColumn" text="Post Code"></TableColumn>
       <TableColumn fx:id="phoneColumn" text="Phone"></TableColumn>
+      <!-- Operations column -->
       <TableColumn fx:id="actionsColumn" text="Actions"></TableColumn>
     </columns>
   </TableView>

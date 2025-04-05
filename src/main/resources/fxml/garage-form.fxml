@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.GarageFormController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<!-- JavaFX FXML Garage Form - Interface for adding/editing garage details --><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.geometry.Insets?><VBox fx:controller="com.carservice.controller.GarageFormController" spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+  <!-- Main form padding -->
   <padding>
     <Insets bottom="20" left="20" right="20" top="20"></Insets>
   </padding>
+  <!-- Grid layout for form fields with 10px spacing -->
   <GridPane hgap="10" vgap="10">
     <padding>
       <Insets bottom="10"></Insets>
     </padding>
+    <!-- Garage Information Fields -->
     <Label GridPane.columnIndex="0" GridPane.rowIndex="0" text="Garage Name:"></Label>
     <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="garageNameField"></TextField>
+    <!-- Location Information Fields -->
     <Label GridPane.columnIndex="0" GridPane.rowIndex="1" text="Address:"></Label>
     <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="addressField"></TextField>
     <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Town:"></Label>
     <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="townField"></TextField>
     <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Post Code:"></Label>
     <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="postCodeField"></TextField>
+    <!-- Contact Information Field -->
     <Label GridPane.columnIndex="0" GridPane.rowIndex="4" text="Phone:"></Label>
     <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="phoneField"></TextField>
   </GridPane>
+  <!-- Action buttons aligned to the right -->
   <HBox alignment="CENTER_RIGHT" spacing="10">
     <Button defaultButton="true" onAction="#handleSave" text="Save"></Button>
     <Button cancelButton="true" onAction="#handleCancel" text="Cancel"></Button>
