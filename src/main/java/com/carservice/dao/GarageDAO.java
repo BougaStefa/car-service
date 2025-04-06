@@ -6,6 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for handling Garage entity operations with the database. Implements CRUD
+ * operations for Garage entities using Long as the identifier type.
+ */
 public class GarageDAO implements CrudDAO<Garage, Long> {
   private static final String FIND_BY_ID = "SELECT * FROM Garage WHERE garageId = ?";
   private static final String FIND_ALL = "SELECT * FROM Garage";
@@ -17,6 +21,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
   private static final String DELETE = "DELETE FROM Garage WHERE garageId = ?";
   private static final String FIND_BY_NAME = "SELECT * FROM Garage WHERE LOWER(garageName) LIKE ?";
 
+  /**
+   * Finds garages by name, supporting partial and case-insensitive matches.
+   *
+   * @param name the name to search for (can be partial)
+   * @return a list of garages whose names contain the provided value (case-insensitive)
+   * @throws SQLException if a database access error occurs
+   */
   public List<Garage> findByName(String name) throws SQLException {
     List<Garage> garages = new ArrayList<>();
     try (Connection conn = DatabaseConfig.getConnection();
@@ -31,6 +42,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     return garages;
   }
 
+  /**
+   * Finds a garage by its ID.
+   *
+   * @param id the garage ID to search for
+   * @return the Garage object if found, null otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Garage findById(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -45,6 +63,12 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     return null;
   }
 
+  /**
+   * Retrieves all garages from the database.
+   *
+   * @return a list of all Garage objects
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public List<Garage> findAll() throws SQLException {
     List<Garage> garages = new ArrayList<>();
@@ -58,6 +82,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     return garages;
   }
 
+  /**
+   * Saves a new garage to the database.
+   *
+   * @param garage the Garage object to save
+   * @return the generated garage ID, or null if the operation fails
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Long save(Garage garage) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -73,6 +104,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     return null;
   }
 
+  /**
+   * Updates an existing garage in the database.
+   *
+   * @param garage the Garage object with updated information
+   * @return true if the garage was successfully updated, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean update(Garage garage) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -83,6 +121,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     }
   }
 
+  /**
+   * Deletes a garage from the database.
+   *
+   * @param id the ID of the garage to delete
+   * @return true if the garage was successfully deleted, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean delete(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -92,6 +137,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
     }
   }
 
+  /**
+   * Maps a database result set row to a Garage object.
+   *
+   * @param rs the ResultSet containing garage data
+   * @return a new Garage object populated with the result set data
+   * @throws SQLException if a database access error occurs
+   */
   private Garage mapRowToGarage(ResultSet rs) throws SQLException {
     return new Garage(
         rs.getLong("garageId"),
@@ -102,6 +154,13 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
         rs.getString("phoneNo"));
   }
 
+  /**
+   * Sets the common parameters of a PreparedStatement using the data from a Garage object.
+   *
+   * @param stmt the PreparedStatement to set parameters for
+   * @param garage the Garage object containing the data
+   * @throws SQLException if a database access error occurs
+   */
   private void setGarageParameters(PreparedStatement stmt, Garage garage) throws SQLException {
     stmt.setString(1, garage.getGarageName());
     stmt.setString(2, garage.getAddress());

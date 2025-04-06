@@ -6,6 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for handling Customer entity operations with the database. Implements CRUD
+ * operations for Customer entities using Long as the identifier type.
+ */
 public class CustomerDAO implements CrudDAO<Customer, Long> {
   private static final String FIND_BY_ID = "SELECT * FROM Customer WHERE customerId = ?";
   private static final String FIND_ALL = "SELECT * FROM Customer";
@@ -17,6 +21,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
   private static final String DELETE = "DELETE FROM Customer WHERE customerId = ?";
   private static final String FIND_BY_SURNAME = "SELECT * FROM Customer WHERE surname LIKE ?";
 
+  /**
+   * Finds a customer by their ID.
+   *
+   * @param id the customer ID to search for
+   * @return the Customer object if found, null otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Customer findById(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -31,6 +42,12 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     return null;
   }
 
+  /**
+   * Retrieves all customers from the database.
+   *
+   * @return a list of all Customer objects
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public List<Customer> findAll() throws SQLException {
     List<Customer> customers = new ArrayList<>();
@@ -44,6 +61,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     return customers;
   }
 
+  /**
+   * Finds customers by surname, supporting partial matches.
+   *
+   * @param surname the surname to search for (can be partial)
+   * @return a list of customers whose surnames start with the provided value
+   * @throws SQLException if a database access error occurs
+   */
   public List<Customer> findBySurname(String surname) throws SQLException {
     List<Customer> customers = new ArrayList<>();
     try (Connection conn = DatabaseConfig.getConnection();
@@ -58,6 +82,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     return customers;
   }
 
+  /**
+   * Saves a new customer to the database.
+   *
+   * @param customer the Customer object to save
+   * @return the generated customer ID, or null if the operation fails
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Long save(Customer customer) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -73,6 +104,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     return null;
   }
 
+  /**
+   * Updates an existing customer in the database.
+   *
+   * @param customer the Customer object with updated information
+   * @return true if the customer was successfully updated, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean update(Customer customer) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -83,6 +121,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     }
   }
 
+  /**
+   * Deletes a customer from the database.
+   *
+   * @param id the ID of the customer to delete
+   * @return true if the customer was successfully deleted, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean delete(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -92,6 +137,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
     }
   }
 
+  /**
+   * Maps a database result set row to a Customer object.
+   *
+   * @param rs the ResultSet containing customer data
+   * @return a new Customer object populated with the result set data
+   * @throws SQLException if a database access error occurs
+   */
   private Customer mapRowToCustomer(ResultSet rs) throws SQLException {
     return new Customer(
         rs.getLong("customerId"),
@@ -102,6 +154,13 @@ public class CustomerDAO implements CrudDAO<Customer, Long> {
         rs.getString("phoneNo"));
   }
 
+  /**
+   * Sets the common parameters of a PreparedStatement using the data from a Customer object.
+   *
+   * @param stmt the PreparedStatement to set parameters for
+   * @param customer the Customer object containing the data
+   * @throws SQLException if a database access error occurs
+   */
   private void setCustomerParameters(PreparedStatement stmt, Customer customer)
       throws SQLException {
     stmt.setString(1, customer.getForename());

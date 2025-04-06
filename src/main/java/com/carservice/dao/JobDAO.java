@@ -6,6 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for handling Job entity operations with the database. Implements CRUD
+ * operations for Job entities using Long as the identifier type. Provides additional functionality
+ * for searching jobs by car, garage, and calculating customer costs.
+ */
 public class JobDAO implements CrudDAO<Job, Long> {
   private static final String FIND_BY_ID = "SELECT * FROM Job WHERE jobId = ?";
   private static final String FIND_ALL = "SELECT * FROM Job";
@@ -24,6 +29,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
           + "AND j.cost IS NOT NULL "
           + "AND j.dateOut IS NOT NULL";
 
+  /**
+   * Finds a job by its ID.
+   *
+   * @param id the job ID to search for
+   * @return the Job object if found, null otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Job findById(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -38,6 +50,12 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return null;
   }
 
+  /**
+   * Retrieves all jobs from the database.
+   *
+   * @return a list of all Job objects
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public List<Job> findAll() throws SQLException {
     List<Job> jobs = new ArrayList<>();
@@ -51,6 +69,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return jobs;
   }
 
+  /**
+   * Finds all jobs for a specific car by registration number.
+   *
+   * @param regNo the registration number of the car
+   * @return a list of jobs associated with the specified car
+   * @throws SQLException if a database access error occurs
+   */
   public List<Job> findByCar(String regNo) throws SQLException {
     List<Job> jobs = new ArrayList<>();
     try (Connection conn = DatabaseConfig.getConnection();
@@ -65,6 +90,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return jobs;
   }
 
+  /**
+   * Finds all jobs for a specific garage.
+   *
+   * @param garageId the ID of the garage
+   * @return a list of jobs associated with the specified garage
+   * @throws SQLException if a database access error occurs
+   */
   public List<Job> findByGarage(Long garageId) throws SQLException {
     List<Job> jobs = new ArrayList<>();
     try (Connection conn = DatabaseConfig.getConnection();
@@ -79,6 +111,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return jobs;
   }
 
+  /**
+   * Saves a new job to the database.
+   *
+   * @param job the Job object to save
+   * @return the generated job ID, or null if the operation fails
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public Long save(Job job) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -94,6 +133,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return null;
   }
 
+  /**
+   * Updates an existing job in the database.
+   *
+   * @param job the Job object with updated information
+   * @return true if the job was successfully updated, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean update(Job job) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -104,6 +150,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     }
   }
 
+  /**
+   * Deletes a job from the database.
+   *
+   * @param id the ID of the job to delete
+   * @return true if the job was successfully deleted, false otherwise
+   * @throws SQLException if a database access error occurs
+   */
   @Override
   public boolean delete(Long id) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
@@ -113,6 +166,14 @@ public class JobDAO implements CrudDAO<Job, Long> {
     }
   }
 
+  /**
+   * Calculates the average service cost for a specific customer. Only considers completed jobs with
+   * non-null costs.
+   *
+   * @param customerId the ID of the customer
+   * @return the average cost of services for the customer, or 0.0 if no completed jobs found
+   * @throws SQLException if a database access error occurs
+   */
   public Double getAverageServiceCostByCustomer(Long customerId) throws SQLException {
     try (Connection conn = DatabaseConfig.getConnection();
         PreparedStatement stmt = conn.prepareStatement(GET_AVG_COST_BY_CUSTOMER)) {
@@ -127,6 +188,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
     return 0.0;
   }
 
+  /**
+   * Maps a database result set row to a Job object.
+   *
+   * @param rs the ResultSet containing job data
+   * @return a new Job object populated with the result set data
+   * @throws SQLException if a database access error occurs
+   */
   private Job mapRowToJob(ResultSet rs) throws SQLException {
     return new Job(
         rs.getLong("jobId"),
@@ -137,6 +205,13 @@ public class JobDAO implements CrudDAO<Job, Long> {
         rs.getDouble("cost"));
   }
 
+  /**
+   * Sets the common parameters of a PreparedStatement using the data from a Job object.
+   *
+   * @param stmt the PreparedStatement to set parameters for
+   * @param job the Job object containing the data
+   * @throws SQLException if a database access error occurs
+   */
   private void setJobParameters(PreparedStatement stmt, Job job) throws SQLException {
     stmt.setLong(1, job.getGarageId());
     stmt.setTimestamp(2, Timestamp.valueOf(job.getDateIn()));
