@@ -5,15 +5,27 @@ import com.carservice.model.Garage;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Service class for managing garages. Provides CRUD operations and additional methods for
+ * garage-related functionality.
+ */
 public class GarageService implements CrudService<Garage, Long> {
   private final GarageDAO garageDAO;
   private final ActivityService activityService;
 
+  /** Constructs a GarageService with default DAO and ActivityService instances. */
   public GarageService() {
     this.garageDAO = new GarageDAO();
     this.activityService = new ActivityService();
   }
 
+  /**
+   * Finds a garage by its ID.
+   *
+   * @param id the ID of the garage.
+   * @return the garage with the specified ID.
+   * @throws ServiceException if the garage is not found or an error occurs.
+   */
   @Override
   public Garage findById(Long id) throws ServiceException {
     try {
@@ -27,6 +39,12 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Retrieves all garages.
+   *
+   * @return a list of all garages.
+   * @throws ServiceException if an error occurs while retrieving garages.
+   */
   @Override
   public List<Garage> findAll() throws ServiceException {
     try {
@@ -36,6 +54,13 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Saves a new garage.
+   *
+   * @param garage the garage to save.
+   * @return the ID of the saved garage.
+   * @throws ServiceException if validation fails or an error occurs while saving.
+   */
   @Override
   public Long save(Garage garage) throws ServiceException {
     try {
@@ -50,6 +75,13 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Updates an existing garage.
+   *
+   * @param garage the garage to update.
+   * @return true if the garage was updated successfully, false otherwise.
+   * @throws ServiceException if validation fails or an error occurs while updating.
+   */
   @Override
   public boolean update(Garage garage) throws ServiceException {
     try {
@@ -66,6 +98,13 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Deletes a garage by its ID.
+   *
+   * @param garageId the ID of the garage to delete.
+   * @return true if the garage was deleted successfully, false otherwise.
+   * @throws ServiceException if an error occurs while deleting the garage.
+   */
   @Override
   public boolean delete(Long garageId) throws ServiceException {
     try {
@@ -81,6 +120,13 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Finds garages by their name.
+   *
+   * @param name the name of the garages.
+   * @return a list of garages with names containing the specified string.
+   * @throws ServiceException if an error occurs while retrieving garages.
+   */
   public List<Garage> findByName(String name) throws ServiceException {
     try {
       return garageDAO.findByName(name);
@@ -89,6 +135,12 @@ public class GarageService implements CrudService<Garage, Long> {
     }
   }
 
+  /**
+   * Validates the garage object to ensure it meets the required criteria.
+   *
+   * @param garage the garage to validate.
+   * @throws ServiceException if validation fails.
+   */
   private void validateGarage(Garage garage) throws ServiceException {
     if (garage.getGarageName() == null || garage.getGarageName().trim().isEmpty()) {
       throw new ServiceException("Garage name cannot be empty");

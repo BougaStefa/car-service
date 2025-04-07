@@ -6,15 +6,27 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service class for managing jobs. Provides CRUD operations and additional methods for job-related
+ * functionality.
+ */
 public class JobService implements CrudService<Job, Long> {
   private final JobDAO jobDAO;
   private final ActivityService activityService;
 
+  /** Constructs a JobService with default DAO and ActivityService instances. */
   public JobService() {
     this.jobDAO = new JobDAO();
     this.activityService = new ActivityService();
   }
 
+  /**
+   * Finds a job by its ID.
+   *
+   * @param id the ID of the job.
+   * @return the job with the specified ID.
+   * @throws ServiceException if the job is not found or an error occurs.
+   */
   @Override
   public Job findById(Long id) throws ServiceException {
     try {
@@ -28,6 +40,13 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Finds jobs associated with a specific car.
+   *
+   * @param regNo the registration number of the car.
+   * @return a list of jobs associated with the car.
+   * @throws ServiceException if an error occurs while retrieving jobs.
+   */
   public List<Job> findByCar(String regNo) throws ServiceException {
     try {
       return jobDAO.findByCar(regNo);
@@ -36,6 +55,13 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Finds jobs associated with a specific garage.
+   *
+   * @param garageId the ID of the garage.
+   * @return a list of jobs associated with the garage.
+   * @throws ServiceException if an error occurs while retrieving jobs.
+   */
   public List<Job> findByGarage(Long garageId) throws ServiceException {
     try {
       return jobDAO.findByGarage(garageId);
@@ -44,6 +70,12 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Retrieves all jobs.
+   *
+   * @return a list of all jobs.
+   * @throws ServiceException if an error occurs while retrieving jobs.
+   */
   @Override
   public List<Job> findAll() throws ServiceException {
     try {
@@ -53,12 +85,18 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Saves a new job.
+   *
+   * @param job the job to save.
+   * @return the ID of the saved job.
+   * @throws ServiceException if validation fails or an error occurs while saving.
+   */
   @Override
   public Long save(Job job) throws ServiceException {
     try {
       validateJob(job);
       Long id = jobDAO.save(job);
-      // Log the activity
       activityService.logActivity(
           "JOB", "CREATE", "New job created for car: " + job.getRegNo(), "BougaStefa");
       return id;
@@ -67,13 +105,19 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Updates an existing job.
+   *
+   * @param job the job to update.
+   * @return true if the job was updated successfully, false otherwise.
+   * @throws ServiceException if validation fails or an error occurs while updating.
+   */
   @Override
   public boolean update(Job job) throws ServiceException {
     try {
       validateJob(job);
       boolean updated = jobDAO.update(job);
       if (updated) {
-        // Log the activity
         activityService.logActivity(
             "JOB", "UPDATE", "Job updated for car: " + job.getRegNo(), "BougaStefa");
       }
@@ -83,12 +127,18 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Deletes a job by its ID.
+   *
+   * @param jobId the ID of the job to delete.
+   * @return true if the job was deleted successfully, false otherwise.
+   * @throws ServiceException if an error occurs while deleting the job.
+   */
   @Override
   public boolean delete(Long jobId) throws ServiceException {
     try {
       boolean deleted = jobDAO.delete(jobId);
       if (deleted) {
-        // Log the activity
         activityService.logActivity("JOB", "DELETE", "Job deleted with ID: " + jobId, "BougaStefa");
       }
       return deleted;
@@ -97,6 +147,13 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Calculates the average service cost for a specific customer.
+   *
+   * @param customerId the ID of the customer.
+   * @return the average service cost for the customer.
+   * @throws ServiceException if the customer ID is null or an error occurs.
+   */
   public Double getAverageServiceCostByCustomer(Long customerId) throws ServiceException {
     try {
       if (customerId == null) {
@@ -109,6 +166,13 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Calculates the total number of service days for a specific car.
+   *
+   * @param regNo the registration number of the car.
+   * @return the total number of service days for the car.
+   * @throws ServiceException if the registration number is null or an error occurs.
+   */
   public long calculateTotalServiceDays(String regNo) throws ServiceException {
     try {
       if (regNo == null || regNo.trim().isEmpty()) {
@@ -121,7 +185,6 @@ public class JobService implements CrudService<Job, Long> {
 
       for (Job job : jobs) {
         LocalDateTime outDate = job.getDateOut() != null ? job.getDateOut() : now;
-        // Adding 1 to count the start day
         long days = java.time.Duration.between(job.getDateIn(), outDate).toDays() + 1;
         totalDays += days;
       }
@@ -132,6 +195,12 @@ public class JobService implements CrudService<Job, Long> {
     }
   }
 
+  /**
+   * Validates the job object to ensure it meets the required criteria.
+   *
+   * @param job the job to validate.
+   * @throws ServiceException if validation fails.
+   */
   private void validateJob(Job job) throws ServiceException {
     if (job.getDateIn() == null) {
       throw new ServiceException("Job date in cannot be null");
