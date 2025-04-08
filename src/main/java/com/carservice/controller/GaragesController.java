@@ -17,6 +17,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Controller class for managing the Garages view. Handles user interactions, data loading, and
+ * communication with the GarageService.
+ */
 public class GaragesController {
   private final GarageService garageService;
   private final ObservableList<Garage> garageList = FXCollections.observableArrayList();
@@ -32,10 +36,12 @@ public class GaragesController {
   @FXML private TableColumn<Garage, String> phoneColumn;
   @FXML private TableColumn<Garage, Void> actionsColumn;
 
+  /** Constructor for initializing the GarageService dependency. */
   public GaragesController() {
     this.garageService = new GarageService();
   }
 
+  /** Initializes the controller and sets up the UI components. */
   @FXML
   private void initialize() {
     setupTableColumns();
@@ -43,6 +49,7 @@ public class GaragesController {
     loadGarages();
   }
 
+  /** Configures the search field to trigger a search when the Enter key is pressed. */
   private void setupSearchField() {
     searchField.setOnKeyPressed(
         event -> {
@@ -52,6 +59,7 @@ public class GaragesController {
         });
   }
 
+  /** Configures the table columns with property value factories and sets up the actions column. */
   private void setupTableColumns() {
     idColumn.setCellValueFactory(new PropertyValueFactory<>("garageId"));
     nameColumn.setCellValueFactory(new PropertyValueFactory<>("garageName"));
@@ -63,6 +71,7 @@ public class GaragesController {
     setupActionsColumn();
   }
 
+  /** Configures the actions column with Edit and Delete buttons for each row. */
   private void setupActionsColumn() {
     actionsColumn.setCellFactory(
         param ->
@@ -87,6 +96,7 @@ public class GaragesController {
             });
   }
 
+  /** Loads the list of garages and populates the garage table. */
   private void loadGarages() {
     try {
       List<Garage> garages = garageService.findAll();
@@ -97,6 +107,7 @@ public class GaragesController {
     }
   }
 
+  /** Handles the search action by filtering garages based on the search term. */
   @FXML
   private void handleSearch() {
     String searchTerm = searchField.getText().trim();
@@ -113,21 +124,37 @@ public class GaragesController {
     }
   }
 
+  /**
+   * Handles the action for clearing the search filter. Resets the search field and reloads all
+   * garages.
+   */
   @FXML
   private void handleClearFilter() {
     searchField.clear();
     loadGarages();
   }
 
+  /** Handles the action for adding a new garage. Opens the garage form in add mode. */
   @FXML
   public void handleAddGarage() {
     showGarageForm(null);
   }
 
+  /**
+   * Handles the action for editing a garage. Opens the garage form in edit mode.
+   *
+   * @param garage the garage to edit
+   */
   private void handleEditGarage(Garage garage) {
     showGarageForm(garage);
   }
 
+  /**
+   * Handles the action for deleting a garage. Prompts the user for confirmation and deletes the
+   * garage if confirmed.
+   *
+   * @param garage the garage to delete
+   */
   private void handleDeleteGarage(Garage garage) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Confirm Delete");
@@ -151,6 +178,11 @@ public class GaragesController {
             });
   }
 
+  /**
+   * Opens the garage form for adding or editing a garage.
+   *
+   * @param garage the garage to edit, or null for adding a new garage
+   */
   private void showGarageForm(Garage garage) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/garage-form.fxml"));
@@ -170,6 +202,11 @@ public class GaragesController {
     }
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
@@ -178,6 +215,11 @@ public class GaragesController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays an informational message in an alert dialog.
+   *
+   * @param message the informational message to display
+   */
   private void showInfo(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Information");

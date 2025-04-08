@@ -3,7 +3,6 @@ package com.carservice.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -15,6 +14,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+/**
+ * Main controller class for the Car Service Management application. Manages navigation between
+ * views, status updates, and user interface elements.
+ */
 public class MainController {
   @FXML private StackPane contentArea;
   @FXML private Label statusLabel;
@@ -30,16 +33,22 @@ public class MainController {
   private static final DateTimeFormatter DATE_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+  /**
+   * Constructor for initializing the current user. In a real application, this would be dynamically
+   * set based on authentication.
+   */
   public MainController() {
-    this.currentUser = "BougaStefa"; // In a real app, this would come from authentication
+    this.currentUser = "BougaStefa"; // Placeholder for authenticated user
   }
 
+  /** Initializes the controller and sets up the status bar and dashboard view. */
   @FXML
   private void initialize() {
     setupStatusBar();
     showDashboard();
   }
 
+  /** Sets up the status bar with a clock and user information. */
   private void setupStatusBar() {
     // Setup clock update
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
@@ -53,10 +62,15 @@ public class MainController {
     updateClock();
   }
 
+  /** Updates the clock label with the current UTC time. */
   private void updateClock() {
     timeLabel.setText("UTC: " + LocalDateTime.now().format(DATE_FORMATTER));
   }
 
+  /**
+   * Displays the Customers view. Loads the FXML file and sets the content area to the Customers
+   * view.
+   */
   @FXML
   public void showCustomers() {
     try {
@@ -71,6 +85,7 @@ public class MainController {
     }
   }
 
+  /** Displays the Cars view. Loads the FXML file and sets the content area to the Cars view. */
   @FXML
   public void showCars() {
     try {
@@ -85,6 +100,9 @@ public class MainController {
     }
   }
 
+  /**
+   * Displays the Garages view. Loads the FXML file and sets the content area to the Garages view.
+   */
   @FXML
   public void showGarages() {
     try {
@@ -99,6 +117,7 @@ public class MainController {
     }
   }
 
+  /** Displays the Jobs view. Loads the FXML file and sets the content area to the Jobs view. */
   @FXML
   public void showJobs() {
     try {
@@ -113,6 +132,10 @@ public class MainController {
     }
   }
 
+  /**
+   * Opens the form to add a new customer. Navigates to the Customers view and triggers the add
+   * customer action.
+   */
   public void showNewCustomerForm() {
     showCustomers();
     if (customersController != null) {
@@ -120,6 +143,9 @@ public class MainController {
     }
   }
 
+  /**
+   * Opens the form to add a new car. Navigates to the Cars view and triggers the add car action.
+   */
   public void showNewCarForm() {
     showCars();
     if (carsController != null) {
@@ -127,6 +153,9 @@ public class MainController {
     }
   }
 
+  /**
+   * Opens the form to add a new job. Navigates to the Jobs view and triggers the add job action.
+   */
   public void showNewJobForm() {
     showJobs();
     if (jobsController != null) {
@@ -134,6 +163,10 @@ public class MainController {
     }
   }
 
+  /**
+   * Opens the form to add a new garage. Navigates to the Garages view and triggers the add garage
+   * action.
+   */
   public void showNewGarageForm() {
     showGarages();
     if (garagesController != null) {
@@ -141,11 +174,13 @@ public class MainController {
     }
   }
 
+  /** Exits the application. */
   @FXML
   private void handleExit() {
     System.exit(0);
   }
 
+  /** Displays the About dialog with application information. */
   @FXML
   private void showAbout() {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -155,6 +190,10 @@ public class MainController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays the Dashboard view. Loads the FXML file and sets the content area to the Dashboard
+   * view.
+   */
   @FXML
   public void showDashboard() {
     try {
@@ -170,10 +209,20 @@ public class MainController {
     }
   }
 
+  /**
+   * Updates the status label with the provided message.
+   *
+   * @param message the status message to display
+   */
   public void updateStatus(String message) {
     statusLabel.setText(message);
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");

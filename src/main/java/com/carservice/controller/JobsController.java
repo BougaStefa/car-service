@@ -21,7 +21,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-// !TODO: Add filters for date and maybe status(completed, ongoing etc.)
+/**
+ * Controller class for managing the Jobs view. Handles user interactions, data loading, and
+ * communication with services.
+ */
 public class JobsController {
   private final JobService jobService;
   private final ObservableList<Job> jobList = FXCollections.observableArrayList();
@@ -40,10 +43,12 @@ public class JobsController {
   @FXML private TableColumn<Job, Double> costColumn;
   @FXML private TableColumn<Job, Void> actionsColumn;
 
+  /** Constructor for initializing the JobService dependency. */
   public JobsController() {
     this.jobService = new JobService();
   }
 
+  /** Initializes the controller and sets up the UI components. */
   @FXML
   private void initialize() {
     setupFilterType();
@@ -52,6 +57,7 @@ public class JobsController {
     loadJobs();
   }
 
+  /** Configures the search field to trigger a search when the Enter key is pressed. */
   private void setupSearchField() {
     searchField.setOnKeyPressed(
         event -> {
@@ -61,6 +67,7 @@ public class JobsController {
         });
   }
 
+  /** Configures the filter type ComboBox with options and sets up a listener for filtering jobs. */
   private void setupFilterType() {
     filterType.setItems(FXCollections.observableArrayList("All", "By Car", "By Garage"));
     filterType.setValue("All");
@@ -68,6 +75,7 @@ public class JobsController {
     filterType.setOnAction(e -> handleSearch());
   }
 
+  /** Configures the table columns with property value factories and custom cell factories. */
   private void setupTableColumns() {
     idColumn.setCellValueFactory(new PropertyValueFactory<>("jobId"));
     garageIdColumn.setCellValueFactory(new PropertyValueFactory<>("garageId"));
@@ -76,7 +84,7 @@ public class JobsController {
     dateOutColumn.setCellValueFactory(new PropertyValueFactory<>("dateOut"));
     costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
-    // Format date columns
+    // Format date columns to display readable date-time values
     dateInColumn.setCellFactory(
         column ->
             new TableCell<>() {
@@ -108,6 +116,150 @@ public class JobsController {
     setupActionsColumn();
   }
 
+  /** Configures the actions column with Edit, Delete, and Complete buttons for each row. */
+  private void setupActionsColumn() {
+    actionsColumn.setCellFactory(
+        param ->
+            new TableCell<>() {
+              private final Button editButton = new Button("Edit");
+              private final Button deleteButton = new Button("Delete");
+              private final Button completeButton = new Button("Complete");
+              private final HBox buttons = new HBox(5, editButton, deleteButton, completeButton);
+
+              {
+                buttons.setAlignment(Pos.CENTER);
+              }
+
+              @Override
+              protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                  setGraphic(null);
+                  return;
+                }
+
+                Job currentJob = getTableView().getItems().get(getIndex());
+                if (currentJob == null) {
+                  setGraphic(null);
+                  return;
+                }
+
+                setGraphic(buttons);
+
+                editButton.setOnAction(event -> handleEditJob(currentJob));
+                deleteButton.setOnAction(event -> handleDeleteJob(currentJob));
+                completeButton.setOnAction(event -> handleCompleteJob(currentJob));
+
+                // Disable complete button if job is already completed
+                completeButton.setDisable(currentJob.getDateOut() != null);
+              }
+            });
+  }
+
+  /** Loads the list of jobs and populates the job table. */
+  private void loadJobs() {
+    try {
+      List<Job> jobs = jobService.findAll();
+      jobList.setAll(jobs);
+      jobTable.setItems(jobList);
+    } catch (ServiceException e) {
+      showError("Error loading jobs: " + e.getMessage());
+    }
+  }
+
+  /** Handles the search action by filtering jobs based on the search term and filter type. */
+  @FXML
+  private void handleSearch() {
+    String searchTerm = searchField.getText().trim();
+    String filter = filterType.getValue();
+
+    try {
+      List<Job> jobs;
+      if (searchTerm.isEmpty() || filter.equals("All")) {
+        loadJobs();
+        return;
+      }
+
+      if (filter.equals("By Car")) {
+        jobs = jobService.findByCar(searchTerm);
+      } else { // By Garage
+        Long garageId;
+        try {
+          garageId = Long.parseLong(searchTerm);
+          jobs = jobService.findByGarage(garageId);
+        } catch (NumberFormatException e) {
+          showError("Please enter a valid garage ID");
+          return;
+        }
+      }
+      jobList.setAll(jobs);
+    } catch (ServiceException e) {
+      showError("Error searching jobs: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Handles the action for clearing the search filter. Resets the search field and filter type,
+   * then reloads all jobs.
+   */
+  @FXML
+  private void handleClearFilter() {
+    searchField.clear();
+    filterType.setValue("All");
+    loadJobs();
+  }
+
+  /** Handles the action for adding a new job. Opens the job form in add mode. */
+  @FXML
+  public void handleAddJob() {
+    showJobForm(null);
+  }
+
+  /**
+   * Handles the action for editing a job. Opens the job form in edit mode.
+   *
+   * @param job the job to edit
+   */
+  private void handleEditJob(Job job) {
+    showJobForm(job);
+  }
+
+  /**
+   * Handles the action for deleting a job. Prompts the user for confirmation and deletes the job if
+   * confirmed.
+   *
+   * @param job the job to delete
+   */
+  private void handleDeleteJob(Job job) {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Confirm Delete");
+    alert.setHeaderText("Delete Job");
+    alert.setContentText("Are you sure you want to delete job ID: " + job.getJobId() + "?");
+
+    alert
+        .showAndWait()
+        .ifPresent(
+            response -> {
+              if (response == ButtonType.OK) {
+                try {
+                  if (jobService.delete(job.getJobId())) {
+                    jobList.remove(job);
+                    showInfo("Job deleted successfully");
+                  }
+                } catch (ServiceException e) {
+                  showError("Error deleting job: " + e.getMessage());
+                }
+              }
+            });
+  }
+
+  /**
+   * Handles the action for completing a job. Prompts the user for confirmation, processes payment,
+   * and marks the job as completed.
+   *
+   * @param job the job to complete
+   */
   private void handleCompleteJob(Job job) {
     if (job.getDateOut() != null) {
       showError("Job is already completed");
@@ -175,125 +327,11 @@ public class JobsController {
             });
   }
 
-  private void setupActionsColumn() {
-    actionsColumn.setCellFactory(
-        param ->
-            new TableCell<>() {
-              private final Button editButton = new Button("Edit");
-              private final Button deleteButton = new Button("Delete");
-              private final Button completeButton = new Button("Complete");
-              private final HBox buttons = new HBox(5, editButton, deleteButton, completeButton);
-
-              {
-                buttons.setAlignment(Pos.CENTER);
-              }
-
-              @Override
-              protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
-                  setGraphic(null);
-                  return;
-                }
-
-                Job currentJob = getTableView().getItems().get(getIndex());
-                if (currentJob == null) {
-                  setGraphic(null);
-                  return;
-                }
-
-                setGraphic(buttons);
-
-                editButton.setOnAction(event -> handleEditJob(currentJob));
-                deleteButton.setOnAction(event -> handleDeleteJob(currentJob));
-                completeButton.setOnAction(event -> handleCompleteJob(currentJob));
-
-                // Disable complete button if job is already completed
-                completeButton.setDisable(currentJob.getDateOut() != null);
-              }
-            });
-  }
-
-  private void loadJobs() {
-    try {
-      List<Job> jobs = jobService.findAll();
-      jobList.setAll(jobs);
-      jobTable.setItems(jobList);
-    } catch (ServiceException e) {
-      showError("Error loading jobs: " + e.getMessage());
-    }
-  }
-
-  @FXML
-  private void handleSearch() {
-    String searchTerm = searchField.getText().trim();
-    String filter = filterType.getValue();
-
-    try {
-      List<Job> jobs;
-      if (searchTerm.isEmpty() || filter.equals("All")) {
-        loadJobs();
-        return;
-      }
-
-      if (filter.equals("By Car")) {
-        jobs = jobService.findByCar(searchTerm);
-      } else { // By Garage
-        Long garageId;
-        try {
-          garageId = Long.parseLong(searchTerm);
-          jobs = jobService.findByGarage(garageId);
-        } catch (NumberFormatException e) {
-          showError("Please enter a valid garage ID");
-          return;
-        }
-      }
-      jobList.setAll(jobs);
-    } catch (ServiceException e) {
-      showError("Error searching jobs: " + e.getMessage());
-    }
-  }
-
-  @FXML
-  private void handleClearFilter() {
-    searchField.clear();
-    filterType.setValue("All");
-    loadJobs();
-  }
-
-  @FXML
-  public void handleAddJob() {
-    showJobForm(null);
-  }
-
-  private void handleEditJob(Job job) {
-    showJobForm(job);
-  }
-
-  private void handleDeleteJob(Job job) {
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    alert.setTitle("Confirm Delete");
-    alert.setHeaderText("Delete Job");
-    alert.setContentText("Are you sure you want to delete job ID: " + job.getJobId() + "?");
-
-    alert
-        .showAndWait()
-        .ifPresent(
-            response -> {
-              if (response == ButtonType.OK) {
-                try {
-                  if (jobService.delete(job.getJobId())) {
-                    jobList.remove(job);
-                    showInfo("Job deleted successfully");
-                  }
-                } catch (ServiceException e) {
-                  showError("Error deleting job: " + e.getMessage());
-                }
-              }
-            });
-  }
-
+  /**
+   * Opens the job form for adding or editing a job.
+   *
+   * @param job the job to edit, or null for adding a new job
+   */
   private void showJobForm(Job job) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/job-form.fxml"));
@@ -313,6 +351,11 @@ public class JobsController {
     }
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
@@ -321,6 +364,11 @@ public class JobsController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays an informational message in an alert dialog.
+   *
+   * @param message the informational message to display
+   */
   private void showInfo(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Information");

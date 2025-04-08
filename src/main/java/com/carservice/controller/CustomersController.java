@@ -18,6 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Controller class for managing the Customers view. Handles user interactions, data loading, and
+ * communication with services.
+ */
 public class CustomersController {
   private final CustomerService customerService;
   private final JobService jobService;
@@ -35,11 +39,13 @@ public class CustomersController {
   @FXML private TableColumn<Customer, Double> avgServiceCostColumn;
   @FXML private TableColumn<Customer, Void> actionsColumn;
 
+  /** Constructor for initializing service dependencies. */
   public CustomersController() {
     this.customerService = new CustomerService();
     this.jobService = new JobService();
   }
 
+  /** Initializes the controller and sets up the UI components. */
   @FXML
   private void initialize() {
     setupTableColumns();
@@ -47,6 +53,7 @@ public class CustomersController {
     loadCustomers();
   }
 
+  /** Configures the search field to trigger a search when the Enter key is pressed. */
   private void setupSearchField() {
     searchField.setOnKeyPressed(
         event -> {
@@ -56,6 +63,7 @@ public class CustomersController {
         });
   }
 
+  /** Configures the table columns with property value factories and custom cell factories. */
   private void setupTableColumns() {
     idColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
     forenameColumn.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -63,7 +71,8 @@ public class CustomersController {
     addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
     postCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postCode"));
     phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
-    // Set up average cost column to calculate value for each customer
+
+    // Set up average service cost column with a custom value factory
     avgServiceCostColumn.setCellValueFactory(
         cellData -> {
           Customer customer = cellData.getValue();
@@ -77,7 +86,7 @@ public class CustomersController {
           }
         });
 
-    // Format average cost column to show currency
+    // Format average service cost column to display currency
     avgServiceCostColumn.setCellFactory(
         column ->
             new TableCell<>() {
@@ -95,6 +104,7 @@ public class CustomersController {
     setupActionsColumn();
   }
 
+  /** Configures the actions column with Edit and Delete buttons for each row. */
   private void setupActionsColumn() {
     actionsColumn.setCellFactory(
         param ->
@@ -119,6 +129,7 @@ public class CustomersController {
             });
   }
 
+  /** Loads the list of customers and populates the customer table. */
   private void loadCustomers() {
     try {
       List<Customer> customers = customerService.findAll();
@@ -129,6 +140,11 @@ public class CustomersController {
     }
   }
 
+  /**
+   * Opens the customer form for adding or editing a customer.
+   *
+   * @param customer the customer to edit, or null for adding a new customer
+   */
   private void showCustomerForm(Customer customer) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/customer-form.fxml"));
@@ -148,6 +164,7 @@ public class CustomersController {
     }
   }
 
+  /** Handles the search action by filtering customers based on the search term. */
   @FXML
   private void handleSearch() {
     String searchTerm = searchField.getText().trim();
@@ -164,21 +181,37 @@ public class CustomersController {
     }
   }
 
+  /**
+   * Handles the action for clearing the search filter. Resets the search field and reloads all
+   * customers.
+   */
   @FXML
   private void handleClearFilter() {
     searchField.clear();
     loadCustomers();
   }
 
+  /** Handles the action for adding a new customer. Opens the customer form in add mode. */
   @FXML
   public void handleAddCustomer() {
     showCustomerForm(null);
   }
 
+  /**
+   * Handles the action for editing a customer. Opens the customer form in edit mode.
+   *
+   * @param customer the customer to edit
+   */
   private void handleEditCustomer(Customer customer) {
     showCustomerForm(customer);
   }
 
+  /**
+   * Handles the action for deleting a customer. Prompts the user for confirmation and deletes the
+   * customer if confirmed.
+   *
+   * @param customer the customer to delete
+   */
   private void handleDeleteCustomer(Customer customer) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Confirm Delete");
@@ -207,6 +240,11 @@ public class CustomersController {
             });
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
@@ -215,6 +253,11 @@ public class CustomersController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays an informational message in an alert dialog.
+   *
+   * @param message the informational message to display
+   */
   private void showInfo(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Information");

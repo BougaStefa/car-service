@@ -22,6 +22,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+/**
+ * Controller class for managing the Cars view. Handles user interactions, data loading, and
+ * communication with services.
+ */
 public class CarsController {
   private final CarService carService;
   private final JobService jobService;
@@ -40,12 +44,14 @@ public class CarsController {
   @FXML private TableColumn<Car, Long> totalServiceDaysColumn;
   @FXML private TableColumn<Car, Void> actionsColumn;
 
+  /** Constructor for initializing service dependencies. */
   public CarsController() {
     this.carService = new CarService();
     this.jobService = new JobService();
     this.customerService = new CustomerService();
   }
 
+  /** Initializes the controller and sets up the UI components. */
   @FXML
   private void initialize() {
     setupCustomerFilter();
@@ -54,6 +60,10 @@ public class CarsController {
     loadCars();
   }
 
+  /**
+   * Configures the customer filter ComboBox with a custom string converter and adds a listener to
+   * filter cars by customer.
+   */
   private void setupCustomerFilter() {
     customerFilter.setConverter(
         new StringConverter<Customer>() {
@@ -81,6 +91,7 @@ public class CarsController {
             });
   }
 
+  /** Configures the table columns with property value factories and custom cell factories. */
   private void setupTableColumns() {
     regNoColumn.setCellValueFactory(new PropertyValueFactory<>("regNo"));
     makeColumn.setCellValueFactory(new PropertyValueFactory<>("make"));
@@ -126,6 +137,7 @@ public class CarsController {
     setupActionsColumn();
   }
 
+  /** Configures the actions column with Edit and Delete buttons for each row. */
   private void setupActionsColumn() {
     actionsColumn.setCellFactory(
         param ->
@@ -150,6 +162,7 @@ public class CarsController {
             });
   }
 
+  /** Loads the list of customers and populates the customer filter ComboBox. */
   private void loadCustomers() {
     try {
       List<Customer> customers = customerService.findAll();
@@ -160,6 +173,7 @@ public class CarsController {
     }
   }
 
+  /** Loads the list of all cars and populates the car table. */
   private void loadCars() {
     try {
       List<Car> cars = carService.findAll();
@@ -170,6 +184,11 @@ public class CarsController {
     }
   }
 
+  /**
+   * Loads the list of cars filtered by the selected customer.
+   *
+   * @param customer the selected customer
+   */
   private void loadCarsByCustomer(Customer customer) {
     try {
       List<Car> cars = carService.findByCustomer(customer.getCustomerId());
@@ -179,21 +198,36 @@ public class CarsController {
     }
   }
 
+  /** Handles the action for adding a new car. Opens the car form in add mode. */
   @FXML
   public void handleAddCar() {
     showCarForm(null);
   }
 
+  /**
+   * Handles the action for clearing the customer filter. Resets the filter and reloads all cars.
+   */
   @FXML
   public void handleClearFilter() {
     customerFilter.setValue(null);
     loadCars();
   }
 
+  /**
+   * Handles the action for editing a car. Opens the car form in edit mode.
+   *
+   * @param car the car to edit
+   */
   private void handleEditCar(Car car) {
     showCarForm(car);
   }
 
+  /**
+   * Handles the action for deleting a car. Prompts the user for confirmation and deletes the car if
+   * confirmed.
+   *
+   * @param car the car to delete
+   */
   private void handleDeleteCar(Car car) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Confirm Delete");
@@ -224,6 +258,11 @@ public class CarsController {
             });
   }
 
+  /**
+   * Opens the car form for adding or editing a car.
+   *
+   * @param car the car to edit, or null for adding a new car
+   */
   private void showCarForm(Car car) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/car-form.fxml"));
@@ -244,6 +283,11 @@ public class CarsController {
     }
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
@@ -252,6 +296,11 @@ public class CarsController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays an informational message in an alert dialog.
+   *
+   * @param message the informational message to display
+   */
   private void showInfo(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Information");

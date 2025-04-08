@@ -12,6 +12,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+/**
+ * Controller class for managing the Job Form view. Handles user interactions, form validation, and
+ * communication with the JobService and PaymentService.
+ */
 public class JobFormController {
   @FXML private TextField garageIdField;
   @FXML private TextField regNoField;
@@ -27,11 +31,18 @@ public class JobFormController {
   private boolean isEditMode;
   private Runnable onSaveCallback;
 
+  /** Initializes the controller and sets up the JobService instance. */
   @FXML
   public void initialize() {
     jobService = new JobService();
   }
 
+  /**
+   * Sets the job to be edited or creates a new job if null. Populates the form fields with the
+   * job's data if in edit mode.
+   *
+   * @param job the job to edit or null for a new job
+   */
   public void setJob(Job job) {
     this.job = job;
     this.isEditMode = job != null;
@@ -40,12 +51,12 @@ public class JobFormController {
       garageIdField.setText(String.valueOf(job.getGarageId()));
       regNoField.setText(job.getRegNo());
 
-      // Set date in
+      // Populate date and time for job start
       dateInPicker.setValue(job.getDateIn().toLocalDate());
       timeInField.setText(
           String.format("%02d:%02d", job.getDateIn().getHour(), job.getDateIn().getMinute()));
 
-      // Set date out if exists
+      // Populate date and time for job end if available
       if (job.getDateOut() != null) {
         dateOutPicker.setValue(job.getDateOut().toLocalDate());
         timeOutField.setText(
@@ -56,10 +67,19 @@ public class JobFormController {
     }
   }
 
+  /**
+   * Sets a callback to be executed after saving the job.
+   *
+   * @param callback the callback to execute
+   */
   public void setOnSaveCallback(Runnable callback) {
     this.onSaveCallback = callback;
   }
 
+  /**
+   * Handles the save button action. Validates input, saves or updates the job, processes payment if
+   * applicable, and closes the form.
+   */
   @FXML
   private void handleSave() {
     if (!validateInput()) {
@@ -84,33 +104,49 @@ public class JobFormController {
     }
   }
 
+  /**
+   * Creates a new job and saves it using the JobService.
+   *
+   * @throws ServiceException if an error occurs while saving the job
+   */
   private void createJob() throws ServiceException {
     Job newJob = new Job();
     populateJobData(newJob);
     jobService.save(newJob);
   }
 
+  /**
+   * Updates the existing job using the JobService.
+   *
+   * @throws ServiceException if an error occurs while updating the job
+   */
   private void updateJob() throws ServiceException {
     populateJobData(job);
     jobService.update(job);
   }
 
+  /**
+   * Populates the job object with data from the form fields.
+   *
+   * @param job the job object to populate
+   * @throws ServiceException if invalid data is provided
+   */
   private void populateJobData(Job job) throws ServiceException {
     try {
       job.setGarageId(Long.parseLong(garageIdField.getText().trim()));
       job.setRegNo(regNoField.getText().trim());
 
-      // Set date in
+      // Combine date and time for job start
       LocalDateTime dateIn = combineDateTime(dateInPicker.getValue(), timeInField.getText());
       job.setDateIn(dateIn);
 
-      // Set date out if provided
+      // Combine date and time for job end if provided
       if (dateOutPicker.getValue() != null && !timeOutField.getText().isEmpty()) {
         LocalDateTime dateOut = combineDateTime(dateOutPicker.getValue(), timeOutField.getText());
         job.setDateOut(dateOut);
       }
 
-      // Set cost
+      // Parse and set cost if provided
       String costText = costField.getText().trim();
       if (!costText.isEmpty()) {
         job.setCost(Double.parseDouble(costText));
@@ -120,6 +156,14 @@ public class JobFormController {
     }
   }
 
+  /**
+   * Combines a date and time string into a LocalDateTime object.
+   *
+   * @param date the date
+   * @param timeStr the time string in HH:mm format
+   * @return the combined LocalDateTime object
+   * @throws ServiceException if the time format is invalid
+   */
   private LocalDateTime combineDateTime(LocalDate date, String timeStr) throws ServiceException {
     try {
       String[] timeParts = timeStr.split(":");
@@ -140,11 +184,17 @@ public class JobFormController {
     }
   }
 
+  /** Handles the cancel button action and closes the form. */
   @FXML
   private void handleCancel() {
     closeForm();
   }
 
+  /**
+   * Validates the input fields and displays error messages if invalid.
+   *
+   * @return true if the input is valid, false otherwise
+   */
   private boolean validateInput() {
     StringBuilder errors = new StringBuilder();
 
@@ -199,6 +249,12 @@ public class JobFormController {
     return true;
   }
 
+  /**
+   * Handles payment processing for the job if it has a completion date.
+   *
+   * @param job the job for which payment is to be processed
+   * @throws ServiceException if an error occurs during payment processing
+   */
   private void handlePayment(Job job) throws ServiceException {
     if (job.getDateOut() != null) {
       // Show payment dialog
@@ -236,6 +292,11 @@ public class JobFormController {
     }
   }
 
+  /**
+   * Displays an error message in an alert dialog.
+   *
+   * @param message the error message to display
+   */
   private void showError(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
@@ -244,6 +305,11 @@ public class JobFormController {
     alert.showAndWait();
   }
 
+  /**
+   * Displays an informational message in an alert dialog.
+   *
+   * @param message the informational message to display
+   */
   private void showInfo(String message) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setTitle("Information");
@@ -252,6 +318,7 @@ public class JobFormController {
     alert.showAndWait();
   }
 
+  /** Closes the form by closing the current stage. */
   private void closeForm() {
     ((Stage) garageIdField.getScene().getWindow()).close();
   }
