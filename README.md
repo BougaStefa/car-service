@@ -92,13 +92,112 @@ The system connects to a MariaDB database named `carservice`. Make sure to confi
 
 The application will automatically connect to the database using the configuration in `src/main/resources/database.properties` and create necessary tables on first run.
 `.
-## Usage
 
-1. Launch the application
-2. Use the dashboard to navigate to different sections
-3. Manage customers, cars, and garages through their respective interfaces
-4. Create and track jobs
-5. Process payments upon job completion
+## User Guidelines
+
+### Getting Started
+
+1. **Launching the Application**
+   - Double-click the application icon or run through command line using `mvn javafx:run`
+   - The application will open to the main dashboard
+
+2. **Understanding the Dashboard**
+   - The dashboard provides quick statistics showing:
+     * Total number of customers
+     * Number of cars in service
+     * Active jobs
+     * Available garages
+   - Recent activity feed shows latest system updates
+   - Quick action buttons for common tasks
+
+### Managing Customers
+
+1. **Adding a New Customer**
+   - Click "Customers" tab
+   - Click "Add New Customer" button
+   - Fill in required fields:
+     * Forename
+     * Surname
+     * Address
+     * Post Code
+     * Phone Number
+   - Click "Save" to create customer record
+
+2. **Finding Customers**
+   - Use the search field to find customers by surname
+   - Customer view shows their average service costs to date
+
+3. **Updating Customer Information**
+   - Select customer from the list
+   - Click "Edit" button
+   - Modify necessary fields
+   - Click "Save" to update
+
+### Vehicle Management
+
+1. **Registering a New Car**
+   - Select customer first
+   - Click "Add Car" button
+   - Enter required details:
+     * Registration Number
+     * Make
+     * Model
+     * Year
+     * Customer
+   - Click "Save" to register car
+
+2. **Viewing Car History**
+   - Select customer from the list
+   - View complete list of their cars
+   - See total service days
+
+### Service Jobs
+
+1. **Creating a New Job**
+   - Click "Add New Job" button
+   - Select car(by registration number)
+   - Choose garage location
+   - Enter job details:
+     * Date in
+     * Date out(if applicable)
+     * Cost(if agreed upon during booking)
+
+2. **Managing Active Jobs**
+   - View all active jobs in Jobs tab
+
+3. **Completing a Job**
+   - Select active job
+   - Click "Complete" button
+   - Process payment
+   - System automatically updates date out upon payment.
+
+### Tips and Best Practices
+
+1. **Search Functionality**
+   - Use partial surnames for broader search results
+   - Registration numbers must be exact matches
+
+2. **Data Management**
+   - Regular updates of customer information
+   - Verify car details when creating new jobs
+
+3. **System Navigation**
+   - Use quick action buttons for common tasks
+   - Tab interface allows easy switching between functions
+   - Dashboard provides system overview
+   - Shortcuts are configured for quick access to main features.
+
+### Troubleshooting
+
+1. **Common Issues**
+   - If search isn't working, check spelling and case
+   - Ensure all required fields are filled in forms
+   - Verify customer exists before adding cars
+
+2. **Error Messages**
+   - Read error messages carefully
+   - Check input data if form submission fails
+   - Contact system administrator for persistent issues
 
 ## Error Handling
 
