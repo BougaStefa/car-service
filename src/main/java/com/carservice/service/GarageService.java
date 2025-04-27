@@ -108,9 +108,20 @@ public class GarageService implements CrudService<Garage, Long> {
   @Override
   public boolean delete(Long garageId) throws ServiceException {
     try {
+      // Check for existing jobs first
+      int existingJobs = garageDAO.checkExistingJobs(garageId);
+      if (existingJobs > 0) {
+        throw new ServiceException(
+            "Cannot delete garage with ID "
+                + garageId
+                + ": Has "
+                + existingJobs
+                + " active job(s). "
+                + "Please reassign or complete all jobs before deleting this garage.");
+      }
+
       boolean deleted = garageDAO.delete(garageId);
       if (deleted) {
-        // Log the activity
         activityService.logActivity(
             "GARAGE", "DELETE", "Garage deleted with ID: " + garageId, "BougaStefa");
       }

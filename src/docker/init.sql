@@ -25,7 +25,7 @@ CREATE TABLE Car (
     model VARCHAR(50) NOT NULL,
     year INT NOT NULL,
     customerId BIGINT NOT NULL,
-    FOREIGN KEY (customerId) REFERENCES Customer(customerId)
+    FOREIGN KEY (customerId) REFERENCES Customer(customerId) ON DELETE CASCADE
 );
 
 -- Create Job table
@@ -36,8 +36,8 @@ CREATE TABLE Job (
     dateOut DATETIME,
     regNo VARCHAR(20) NOT NULL,
     cost DECIMAL(10,2),
-    FOREIGN KEY (garageId) REFERENCES Garage(garageId),
-    FOREIGN KEY (regNo) REFERENCES Car(regNo)
+    FOREIGN KEY (garageId) REFERENCES Garage(garageId) ON DELETE RESTRICT,
+    FOREIGN KEY (regNo) REFERENCES Car(regNo) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Activity (
@@ -56,7 +56,7 @@ CREATE TABLE Payment (
     paymentDate DATETIME NOT NULL,
     paymentMethod VARCHAR(50) NOT NULL,
     paymentStatus VARCHAR(20) NOT NULL,
-    FOREIGN KEY (jobId) REFERENCES Job(jobId)
+    FOREIGN KEY (jobId) REFERENCES Job(jobId) ON DELETE CASCADE
 );
 
 

@@ -188,7 +188,7 @@ public class CarFormController {
     try {
       int year = Integer.parseInt(yearField.getText().trim());
       if (year < 1900 || year > 2100) {
-        errors.append("Year must be between 1900 and 2100\n");
+        errors.append("Year must be between 1900 and 2025\n");
       }
     } catch (NumberFormatException e) {
       errors.append("Invalid year format\n");

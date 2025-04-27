@@ -19,6 +19,7 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
       "UPDATE Garage SET garageName = ?, address = ?, town = ?, postCode = ?, phoneNo = ? WHERE"
           + " garageId = ?";
   private static final String DELETE = "DELETE FROM Garage WHERE garageId = ?";
+  private static final String CHECK_EXISTING_JOBS = "SELECT COUNT(*) FROM Job WHERE garageId = ?";
   private static final String FIND_BY_NAME = "SELECT * FROM Garage WHERE LOWER(garageName) LIKE ?";
 
   /**
@@ -102,6 +103,23 @@ public class GarageDAO implements CrudDAO<Garage, Long> {
       }
     }
     return null;
+  }
+
+  /**
+   * Checks if a garage has any associated jobs.
+   *
+   * @param garageId the ID of the garage to check
+   * @return the number of jobs associated with this garage
+   * @throws SQLException if a database access error occurs
+   */
+  public int checkExistingJobs(Long garageId) throws SQLException {
+    try (Connection conn = DatabaseConfig.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(CHECK_EXISTING_JOBS)) {
+      stmt.setLong(1, garageId);
+      try (ResultSet rs = stmt.executeQuery()) {
+        return rs.next() ? rs.getInt(1) : 0;
+      }
+    }
   }
 
   /**
