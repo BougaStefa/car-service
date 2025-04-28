@@ -133,6 +133,12 @@ The application will automatically connect to the database using the configurati
    - Modify necessary fields
    - Click "Save" to update
 
+4. **Deleting a Customer**
+   - Select customer from the list
+   - Click "Delete" button
+   - Confirm deletion in the dialog box
+   - Note: Deleting a customer deletes all their cars and jobs associated with them.
+
 ### Vehicle Management
 
 1. **Registering a New Car**
@@ -171,11 +177,61 @@ The application will automatically connect to the database using the configurati
    - Process payment
    - System automatically updates date out upon payment.
 
+### Managing Garages
+
+1. **Viewing Garages**
+   - Navigate to the "Garages" tab in the application.
+   - The table displays all garages with details such as:
+     * Garage ID
+     * Name
+     * Address
+     * Town
+     * Post Code
+     * Phone Number
+
+2. **Searching for Garages**
+   - Use the search field to find garages by name.
+   - Press "Enter" after typing the name to filter results.
+   - Click "Clear Filter" to reset the search and view all garages.
+
+3. **Adding a New Garage**
+   - Click the "Add Garage" button.
+   - Fill in the required fields:
+     * Garage Name
+     * Address
+     * Town
+     * Post Code
+     * Phone Number
+   - Click "Save" to create the garage record.
+
+4. **Editing a Garage**
+   - Locate the garage in the table.
+   - Click the "Edit" button in the Actions column.
+   - Update the necessary fields in the form.
+   - Click "Save" to apply changes.
+
+5. **Deleting a Garage**
+   - Locate the garage in the table.
+   - Click the "Delete" button in the Actions column.
+   - Confirm the deletion in the dialog box.
+   - Note: Garages with active jobs cannot be deleted. Reassign or complete jobs before deletion.
+
+6. **Best Practices**
+   - Ensure all fields are filled correctly when adding or editing garages.
+   - Use exact matches for search terms to improve accuracy.
+   - Regularly update garage details to maintain data integrity.
+
+7. **Troubleshooting**
+   - If a garage cannot be deleted, check for active jobs associated with it.
+   - Verify input formats for fields like phone numbers and post codes.
+   - Contact the system administrator for persistent issues. 
+
+
 ### Tips and Best Practices
 
 1. **Search Functionality**
-   - Use partial surnames for broader search results
    - Registration numbers must be exact matches
+   - Garage search is bsaed on Garage ID
 
 2. **Data Management**
    - Regular updates of customer information
